@@ -1,0 +1,62 @@
+Exercise 1
+
+fork1.c code
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int num;
+
+int main(int argc, char *argv[]) {
+
+  
+  // add code below this line    
+  
+  num = 100;
+  int id = fork();
+
+  if (id == 0) {
+    printf("value in child process: %d\n", num);
+  } else if (id > 0) {
+    printf("value in parent process: %d\n", num);
+  } else {
+    printf("fork did not work as intended\n");
+    exit(1);
+  }  
+  
+  // add code above this line
+  
+  return 0;
+}
+
+Q.2
+What is the value of the variable num in the child process?
+Fill in the blank and click the button below to submit.
+
+value in child process: 100
+
+answer 100
+
+Q.3
+What happens to num when it is accessed and changed in both the parent and the child processes?
+
+Select an answer and click the button below to submit.
+
+
+1) The program crashes.
+
+
+2) The child process retains its own value for x.
+
+
+3) The child process inherits the variable value of x from the parent, so the variables are the same.
+
+
+4) The child process returns a NULL value for x.
+
+
+
+answer: The child process retains its own value for x.
+
+(akkkada process retains vaste adi pettandi)
