@@ -1,0 +1,274 @@
+FCFS Scheduling
+
+#include <stdio.h>
+
+int main() {
+    int n; // number of processes
+    int duration[100], waiting_time[100], turnaround_time[100];
+    float total_waiting_time = 0, total_turnaround_time = 0;
+
+    // Input number of processes and their durations
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+
+    for(int i = 0; i < n; i++) {
+        printf("Enter duration for process %d: ", i+1);
+        scanf("%d", &duration[i]);
+    }
+
+    // Initialize waiting time for the first process
+    waiting_time[0] = 0;
+
+    // Calculate waiting time and turnaround time for each process
+    for(int i = 1; i < n; i++) {
+        waiting_time[i] = duration[i-1] + waiting_time[i-1];
+        turnaround_time[i] = duration[i] + waiting_time[i];
+    }
+
+    // Calculate total waiting time and total turnaround time
+    for(int i = 0; i < n; i++) {
+        total_waiting_time += waiting_time[i];
+        total_turnaround_time += turnaround_time[i];
+    }
+
+    // Display the results
+    printf("Process\tDuration\tWaiting Time\tTurnaround Time\n");
+    for(int i = 0; i < n; i++) {
+        printf("%d\t%d\t\t%d\t\t%d\n", i+1, duration[i], waiting_time[i], turnaround_time[i]);
+    }
+
+    printf("Average Waiting Time: %.2f\n", total_waiting_time/n);
+    printf("Average Turnaround Time: %.2f\n", total_turnaround_time/n);
+
+    return 0;
+}
+
+SJF Scheduling
+
+#include <stdio.h>
+
+int main() {
+    int n; // number of processes
+    int execution_time[100], waiting_time[100], turnaround_time[100], process_id[100];
+    float total_waiting_time = 0, total_turnaround_time = 0;
+
+    // Gather input from the user
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+
+    for(int i = 0; i < n; i++) {
+        printf("Enter execution time for process %d: ", i+1);
+        scanf("%d", &execution_time[i]);
+        process_id[i] = i+1;
+    }
+
+    // Bubble sort to arrange processes based on their execution time
+    for(int i = 0; i < n-1; i++) {
+        for(int j = 0; j < n-i-1; j++) {
+            if(execution_time[j] > execution_time[j+1]) {
+                // Swap execution times
+                int temp = execution_time[j];
+                execution_time[j] = execution_time[j+1];
+                execution_time[j+1] = temp;
+
+                // Swap process IDs to keep them in sync with execution times
+                int temp_id = process_id[j];
+                process_id[j] = process_id[j+1];
+                process_id[j+1] = temp_id;
+            }
+        }
+    }
+
+    // Calculate waiting and turnaround times
+    waiting_time[0] = 0;
+    turnaround_time[0] = execution_time[0];
+    for(int i = 1; i < n; i++) {
+        waiting_time[i] = execution_time[i-1] + waiting_time[i-1];
+        turnaround_time[i] = execution_time[i] + waiting_time[i];
+    }
+
+    // Calculate total waiting and turnaround times
+    for(int i = 0; i < n; i++) {
+        total_waiting_time += waiting_time[i];
+        total_turnaround_time += turnaround_time[i];
+    }
+
+    // Display the results
+    printf("Process\tExecution Time\tWaiting Time\tTurnaround Time\n");
+    for(int i = 0; i < n; i++) {
+        printf("%d\t%d\t\t%d\t\t%d\n", process_id[i], execution_time[i], waiting_time[i], turnaround_time[i]);
+    }
+
+    printf("\nAverage Waiting Time: %.2f\n", total_waiting_time/n);
+    printf("Average Turnaround Time: %.2f\n", total_turnaround_time/n);
+
+    return 0;
+}
+
+Multi-Level Feedback
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_PROCESSES 100
+#define HIGH_PRIORITY_QUANTUM 2
+#define MEDIUM_PRIORITY_QUANTUM 4
+#define LOW_PRIORITY_QUANTUM 8
+
+typedef struct {
+    int id;               // Process ID
+    int duration;         // Total duration of the process
+    int remaining_time;   // Remaining time for the process
+    int waiting_time;     // Waiting time of the process
+    int turnaround_time;  // Turnaround time of the process
+} Process;
+
+typedef struct {
+    Process processes[MAX_PROCESSES];
+    int front, rear;
+    int time_quantum; // Time quantum for the queue
+} Queue;
+
+// Function to initialize a queue
+void initialize_queue(Queue *q, int time_quantum) {
+    q->front = 0;
+    q->rear = 0;
+    q->time_quantum = time_quantum;
+}
+
+// Function to enqueue a process into the queue
+void enqueue(Queue *q, Process p) {
+    q->processes[q->rear++] = p;
+    printf("Process %d enqueued in queue with time quantum %d\n", p.id, q->time_quantum);
+}
+
+// Function to dequeue a process from the queue
+Process dequeue(Queue *q) {
+    return q->processes[q->front++];
+}
+
+// Function to check if the queue is empty
+int is_empty(Queue *q) {
+    return q->front == q->rear;
+}
+
+// Function to run the MLFQ scheduling algorithm
+void mlfq_scheduling(Queue *high_priority, Queue *medium_priority, Queue *low_priority, Process processes[], int n) {
+    int completed_processes = 0;
+    int current_time = 0;
+
+    while (completed_processes < n) {
+        // Check high priority queue
+        if (!is_empty(high_priority)) {
+            Process current = dequeue(high_priority);
+            printf("Process %d dequeued from queue with time quantum %d\n", current.id, high_priority->time_quantum);
+            printf("Process %d is running in high priority queue\n", current.id);
+
+            if (current.remaining_time > high_priority->time_quantum) {
+                current.remaining_time -= high_priority->time_quantum;
+                current_time += high_priority->time_quantum; // Update current time
+                enqueue(medium_priority, current); // Move to medium priority queue
+            } else {
+                // Finished execution
+                current_time += current.remaining_time; // Update current time
+                current.waiting_time = current_time - current.duration; // Update waiting time
+                current.turnaround_time = current_time; // Update turnaround time
+                printf("Process %d finished execution\n", current.id);
+                processes[current.id - 1] = current; // Store the completed process
+                completed_processes++;
+            }
+            continue;
+        }
+
+        // Check medium priority queue
+        if (!is_empty(medium_priority)) {
+            Process current = dequeue(medium_priority);
+            printf("Process %d dequeued from queue with time quantum %d\n", current.id, medium_priority->time_quantum);
+            printf("Process %d is running in medium priority queue\n", current.id);
+
+            if (current.remaining_time > medium_priority->time_quantum) {
+                current.remaining_time -= medium_priority->time_quantum;
+                current_time += medium_priority->time_quantum; // Update current time
+                current.waiting_time += current_time - current.duration; // Update waiting time
+                enqueue(low_priority, current); // Move to low priority queue
+            } else {
+                // Finished execution
+                current_time += current.remaining_time; // Update current time
+                current.waiting_time = current_time - current.duration; // Update waiting time
+                current.turnaround_time = current_time; // Update turnaround time
+                printf("Process %d finished execution\n", current.id);
+                processes[current.id - 1] = current; // Store the completed process
+                completed_processes++;
+            }
+            continue;
+        }
+
+        // Check low priority queue
+        if (!is_empty(low_priority)) {
+            Process current = dequeue(low_priority);
+            printf("Process %d dequeued from queue with time quantum %d\n", current.id, low_priority->time_quantum);
+            printf("Process %d is running in low priority queue\n", current.id);
+
+            if (current.remaining_time > low_priority->time_quantum) {
+                current.remaining_time -= low_priority->time_quantum;
+                current_time += low_priority->time_quantum; // Update current time
+                current.waiting_time += current_time - current.duration; // Update waiting time
+                enqueue(low_priority, current); // Remain in low priority queue
+            } else {
+                // Finished execution
+                current_time += current.remaining_time; // Update current time
+                current.waiting_time = current_time - current.duration; // Update waiting time
+                current.turnaround_time = current_time; // Update turnaround time
+                printf("Process %d finished execution\n", current.id);
+                processes[current.id - 1] = current; // Store the completed process
+                completed_processes++;
+            }
+            continue;
+        }
+    }
+}
+
+int main() {
+    int n;
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+
+    Queue high_priority, medium_priority, low_priority;
+    initialize_queue(&high_priority, HIGH_PRIORITY_QUANTUM);
+    initialize_queue(&medium_priority, MEDIUM_PRIORITY_QUANTUM);
+    initialize_queue(&low_priority, LOW_PRIORITY_QUANTUM);
+
+    Process processes[MAX_PROCESSES];
+    for (int i = 0; i < n; i++) {
+        printf("Enter duration for process %d: ", i + 1);
+        scanf("%d", &processes[i].duration);
+        processes[i].id = i + 1; // Process ID
+        processes[i].remaining_time = processes[i].duration; // Initialize remaining time
+        processes[i].waiting_time = 0; // Initialize waiting time
+        processes[i].turnaround_time = 0; // Initialize turnaround time
+        enqueue(&high_priority, processes[i]); // Start with high priority queue
+    }
+
+    mlfq_scheduling(&high_priority, &medium_priority, &low_priority, processes, n);
+
+    // Display results
+    printf("\nProcess\tDuration\tWaiting Time\tTurnaround Time\n");
+    for (int i = 0; i < n; i++) {
+        printf("%d\t%d\t\t%d\t\t%d\n", processes[i].id, processes[i].duration, processes[i].waiting_time, processes[i].turnaround_time);
+    }
+
+    // Calculate averages
+    float avg_waiting_time = 0, avg_turnaround_time = 0;
+    for (int i = 0; i < n; i++) {
+        avg_waiting_time += processes[i].waiting_time;
+        avg_turnaround_time += processes[i].turnaround_time;
+    }
+    avg_waiting_time /= n;
+    avg_turnaround_time /= n;
+
+    // Display averages
+    //printf("\nAverage Waiting Time: %.2f\n", avg_waiting_time);
+    //printf("Average Turnaround Time: %.2f\n", avg_turnaround_time);
+
+    return 0;
+}
