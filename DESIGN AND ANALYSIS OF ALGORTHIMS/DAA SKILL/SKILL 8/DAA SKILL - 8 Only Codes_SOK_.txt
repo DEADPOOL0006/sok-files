@@ -1,0 +1,62 @@
+
+                                                                                       DAA SKILL - 8
+
+1) Candies
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    long long n, i, res = 0;
+    scanf("%lld", &n);
+    long long *r = malloc(n * sizeof(long long)), *c = malloc(n * sizeof(long long));
+    
+    for (i = 0; i < n; i++) {
+        scanf("%lld", &r[i]);
+        c[i] = 1;
+    }
+    
+    for (i = 1; i < n; i++)
+        if (r[i] > r[i - 1]) c[i] = c[i - 1] + 1;
+    
+    for (i = n - 2; i >= 0; i--)
+        if (r[i] > r[i + 1] && c[i] <= c[i + 1]) c[i] = c[i + 1] + 1;
+    
+
+
+    for (i = 0; i < n; i++) res += c[i];
+    printf("%lld\n", res);
+    
+    free(r); free(c);
+    return 0;
+}
+
+
+
+
+
+2) Goodland Electricity
+
+#include <stdio.h>
+
+int getCnt(int *arr, int n, int k) {
+    int next = -1, cnt = 0, prev = -1;
+    while (next < n - 1) {
+        int on = (next + k < n) ? next + k : n - 1;
+        while (on > prev && arr[on] != 1) on--;
+        if (on == prev) return -1;
+        cnt++, prev = on, next = on + k - 1;
+    }
+    return cnt;
+}
+
+int main() {
+    int n, k;
+    scanf("%d %d", &n, &k);
+    int arr[n];
+    for (int i = 0; i < n; i++) 
+        scanf("%d", &arr[i]);
+    printf("%d\n", getCnt(arr, n, k));
+    return 0;
+}
+
