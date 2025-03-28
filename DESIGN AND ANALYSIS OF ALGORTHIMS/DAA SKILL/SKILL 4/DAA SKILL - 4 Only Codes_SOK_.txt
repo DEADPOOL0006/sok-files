@@ -1,0 +1,178 @@
+
+                                                                                       DAA SKILL - 4
+
+1) Ice Cream Parlor
+
+#include <stdio.h>
+
+int main() {
+    int t, m, n;
+    scanf("%d", &t);
+    while (t--) {
+        scanf("%d %d", &m, &n);
+        int a[n];
+        for (int i = 0; i < n; i++) {
+            scanf("%d", &a[i]);
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (a[i] + a[j] == m) {
+                    printf("%d %d\n", i + 1, j + 1);
+                    break;
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+
+
+
+2) Missing Numbers
+
+#include <stdio.h>
+#include <stdlib.h>
+
+void missingNumbers(int* arr, int* brr, int n, int m) {
+    int max = 0;
+    for (int i = 0; i < n; i++) 
+    if (arr[i] > max) max = arr[i];
+    
+    for (int i = 0; i < m; i++) 
+    if (brr[i] > max) max = brr[i];
+
+    int* list = (int*)calloc(max + 1, sizeof(int));
+    for (int i = 0; i < n; i++) list[arr[i]]++;
+    for (int i = 0; i < m; i++) list[brr[i]]--;
+
+    for (int i = 0; i <= max; i++) 
+    if (list[i] < 0) printf("%d ", i);
+
+    free(list);
+}
+
+int main() {
+    int n, m;
+    scanf("%d", &n);
+    int arr[n];
+    for (int i = 0; i < n; i++) 
+    scanf("%d", &arr[i]);
+    
+    scanf("%d", &m);
+    int brr[m];
+    for (int i = 0; i < m; i++) 
+    scanf("%d", &brr[i]);
+
+    missingNumbers(arr, brr, n, m);
+    
+    return 0;
+}
+
+
+
+
+3) Sherlock and Array
+
+#include <stdio.h>
+
+char* balancedSums(int* arr, int n) {
+    
+    long long leftsum = 0, total = 0;
+    for (int i = 0; i < n; i++) 
+    total += arr[i];
+    
+    for (int i = 0; i < n; i++) {
+        if (leftsum == total - arr[i] - leftsum) 
+        return "YES";
+        
+        leftsum += arr[i];
+    }
+    return "NO";
+}
+
+int main() {
+    int T;
+    scanf("%d", &T);
+    while (T--) {
+        int n;
+        scanf("%d", &n);
+        int arr[n];
+        for (int i = 0; i < n; i++) 
+            
+        scanf("%d", &arr[i]);
+        printf("%s\n", balancedSums(arr, n));
+    }
+    return 0;
+}
+
+
+
+
+4) Minimum Loss  [ C++ CODE ]
+
+#include <stdio.h>
+#include <algorithm>
+
+using namespace std;
+
+typedef long long ll;
+
+int n, k;
+pair<ll, int> a[200001];
+
+int main() {
+	scanf("%d", &n);
+	for(int i = 0; i < n; ++i) {
+		scanf("%lld", &a[i].first);
+		a[i].second = i;
+	}
+	sort(a, a + n);
+
+	ll res = 1e18;
+	for(int i = 1; i < n; ++i)
+		if(a[i].second < a[i - 1].second)
+			res = min(res, abs(a[i].first - a[i - 1].first));
+
+	printf("%lld\n", res);
+}
+
+
+
+
+5) Pairs
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int compare(const void *a, const void *b) {
+    return (*(int*)a - *(int*)b);
+}
+
+int main() {
+    int n, k, count = 0;
+    scanf("%d %d", &n, &k);
+    int num[n];
+    
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &num[i]);
+    }
+    
+    qsort(num, n, sizeof(int), compare);
+
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (abs(num[j] - num[i]) == k) {
+                count++;
+            } else if (abs(num[j] - num[i]) > k) {
+                break;
+            }
+        }
+    }
+    
+    printf("%d\n", count);
+    return 0;
+}
+
+
+
