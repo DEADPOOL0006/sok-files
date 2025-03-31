@@ -13,7 +13,7 @@
 - 📄 Navigate to the Coursera peer grading page for your assignment.
 
 ### 📂 3. Upload a File
-- 🔼 Select and upload any required file from your system.
+- 🔼 Upload any file from your system..
 
 ### 🔗 4. Generate a Link
 - 🖱 Click on the Edulink extension.
