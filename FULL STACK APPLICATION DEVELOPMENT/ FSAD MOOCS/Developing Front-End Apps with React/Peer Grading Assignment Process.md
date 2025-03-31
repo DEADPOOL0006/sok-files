@@ -1,5 +1,7 @@
 # Peer Grading Assignment Process
 
+[![Peer Grading Video](https://img.shields.io/badge/Watch%20Video-Click%20Here-blue)](https://youtu.be/lzCw1lo1uOY?si=S_fDgM3KHANI5ZN9)
+
 ## Steps to Follow
 
 1. **Install Edulink Extension**  
