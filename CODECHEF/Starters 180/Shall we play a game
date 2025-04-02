@@ -1,2 +1,35 @@
 //C CODE
 
+#include <stdio.h>
+#define MOD 998244353
+
+long long modExp(long long sok1, long long sok2, long long sok3) {
+    long long sok4 = 1;
+    sok1 = sok1 % sok3;
+    while(sok2 > 0) {
+        if(sok2 & 1)
+            sok4 = (sok4 * sok1) % sok3;
+        sok1 = (sok1 * sok1) % sok3;
+        sok2 >>= 1;
+    }
+    return sok4;
+}
+
+int main(){
+    int sok5;
+    scanf("%d", &sok5);
+    while(sok5--){
+        int sok6;
+        scanf("%d", &sok6);
+        
+        long long sok7;
+        if(sok6 % 2 == 1){
+            sok7 = modExp(2, sok6-1, MOD);
+        } else {
+            sok7 = (3 * modExp(2, sok6-2, MOD)) % MOD;
+        }
+        
+        printf("%lld\n", sok7);
+    }
+    return 0;
+}
