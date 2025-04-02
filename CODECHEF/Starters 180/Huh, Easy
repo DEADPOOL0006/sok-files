@@ -1,0 +1,56 @@
+//C CODE
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void solve() {
+    int sok1, sok2;
+    scanf("%d %d", &sok1, &sok2);
+
+    if (sok1 == 1) {
+        if (sok2 == 1) {
+            printf("A\nA\n");
+        } else {
+            printf("A\nC\n");
+        }
+        return;
+    }
+
+    if (sok2 < sok1 / 2 || sok2 > sok1) {
+        printf("-1\n");
+        return;
+    }
+
+    char* sok3 = (char*)malloc(sok1 + 1);
+    for (int sok4 = 0; sok4 < sok1; sok4++) {
+        sok3[sok4] = (sok4 % 2 == 0) ? 'A' : 'B';
+    }
+    sok3[sok1] = '\0';
+
+    char* sok5 = (char*)malloc(sok1 + 1);
+    strcpy(sok5, sok3);
+
+    int sok6 = sok1 - sok2;
+    int sok7 = 0;
+
+    for (int sok8 = 0; sok8 < sok1 && sok7 < sok6; sok8 += 2) {
+        sok5[sok8] = 'C';
+        sok7++;
+    }
+
+    printf("%s\n%s\n", sok3, sok5);
+
+    free(sok3);
+    free(sok5);
+}
+
+int main() {
+    int sok9;
+    scanf("%d", &sok9);
+    while (sok9--) {
+        solve();
+    }
+
+    return 0;
+}
