@@ -25,7 +25,7 @@
 ### 📤 6. Share the Link  
 - 🔗 Copy and share the link with others or in a group for review.  
 
-> **Note:** Your friend must also upload the assignment. Only then can the review be given.  
+**Note:** Your friend must also upload the assignment. Only then can the review be given.  
 
 ---
 
