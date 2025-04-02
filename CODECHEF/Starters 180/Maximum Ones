@@ -1,0 +1,32 @@
+//C CODE
+
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    int sok1;
+    scanf("%d", &sok1);
+    while(sok1--) {
+        int sok2, sok3;
+        scanf("%d %d", &sok2, &sok3);
+        
+        char sok4[101];
+        scanf("%s", sok4);
+        
+        for (int sok5 = sok2 - 2; sok5 >= 0 && sok3 > 0; sok5--) {
+            if (sok4[sok5] == '0' && sok4[sok5+1] == '1') {
+                sok4[sok5] = '1';
+                sok3--;
+            }
+        }
+        
+        int sok6 = 0;
+        for (int sok7 = 0; sok7 < sok2; sok7++) {
+            if(sok4[sok7] == '1')
+                sok6++;
+        }
+        
+        printf("%d\n", sok6);
+    }
+    return 0;
+}
