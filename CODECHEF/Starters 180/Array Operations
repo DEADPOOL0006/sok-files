@@ -1,0 +1,54 @@
+//C++ CODE
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    int sok1;
+    cin >> sok1;
+    vector<int> sok2;
+
+    while (sok1--) {
+        int sok3;
+        cin >> sok3;
+        vector<int> sok4(sok3);
+
+        for (int sok5 = 0; sok5 < sok3; ++sok5) {
+            cin >> sok4[sok5];
+        }
+
+        if (sok3 == 1) {
+            sok2.push_back(sok4[0]);
+            continue;
+        }
+
+        int sok6 = (sok3 - 1) / 2;
+        int sok7 = *max_element(sok4.begin(), sok4.end());
+
+        bool sok8 = false;
+        for (int sok9 = 0; sok9 < sok3; sok9 += 2) {
+            if (sok4[sok9] == sok7) {
+                sok8 = true;
+                break;
+            }
+        }
+
+        int sok10;
+        if (sok8) {
+            sok10 = sok6;
+        } else {
+            sok10 = (sok6 - 1 >= 0) ? sok6 - 1 : 0;
+        }
+
+        sok2.push_back(sok7 + sok10);
+    }
+
+    for (int sok11 = 0; sok11 < sok2.size(); ++sok11) {
+        cout << sok2[sok11] << "\n";
+    }
+
+    return 0;
+}
