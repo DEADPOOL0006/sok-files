@@ -1,0 +1,2 @@
+sok1, sok2 = map(int, input().split())
+print("Yes" if sok2 > sok1 else "No")
