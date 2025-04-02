@@ -1,5 +1,5 @@
-# Exploratory Data Analysis for Machine Learning  
+# Python for Data Science, AI & Development  
 
 **Click below to visit the Coursera course 👇**  
 
-[![Coursera](https://img.shields.io/badge/Coursera-Exploratory%20Data%20Analysis%20for%20ML-blue?style=for-the-badge&logo=Coursera)](https://www.coursera.org/learn/ibm-exploratory-data-analysis-for-machine-learning)  
+[![Coursera](https://img.shields.io/badge/Coursera-Python%20for%20Data%20Science%2C%20AI%20%26%20Development-blue?style=for-the-badge&logo=Coursera)](https://www.coursera.org/learn/python-for-applied-data-science-ai)  
