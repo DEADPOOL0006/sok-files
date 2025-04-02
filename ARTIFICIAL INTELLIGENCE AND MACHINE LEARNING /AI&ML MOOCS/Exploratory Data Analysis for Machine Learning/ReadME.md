@@ -1,4 +1,4 @@
-**Exploratory Data Analysis for Machine Learning**  
+# Exploratory Data Analysis for Machine Learning  
 
 **Click below to visit the Coursera course 👇**  
 
