@@ -1,6 +1,4 @@
 <p align="center">
-  <img src="https://cdn.codechef.com/download/small-banner/START180D/1743499726.png" width="500"><br><br>
-  <a href="https://www.codechef.com/START180D">
-    <img src="https://img.shields.io/badge/CodeChef-START180D-blue?style=for-the-badge">
-  </a>
-</p> 
+  <span style="display: inline-block; background: url('https://cdn.codechef.com/download/small-banner/START180D/1743499726.png') no-repeat center; width: 500px; height: 200px;">
+  </span>
+</p>
