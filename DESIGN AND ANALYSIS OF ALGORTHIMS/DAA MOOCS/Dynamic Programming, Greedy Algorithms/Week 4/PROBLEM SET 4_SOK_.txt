@@ -1,0 +1,204 @@
+                                                                           Programming Assignment: Problem Set 4
+
+1. Solving CNF Satisfiability Problem
+
+
+# In[1]:
+
+class SATInstance:
+    def __init__(self, n, clauses):
+        self.n = n
+        self.m = len(clauses)
+        self.clauses = clauses
+        assert self.is_valid()
+
+    def is_valid(self):
+        assert self.n >= 1
+        assert self.m >= 0
+        for c in self.clauses:
+            for l in c:
+                assert (1 <= l <= self.n) or (-self.n <= l <= -1)
+        return True
+
+    def add_clause(self, c):
+        for l in c:
+            assert (1 <= l <= self.n) or (-self.n <= l <= -1)
+        self.clauses.append(c)
+
+    def evaluate_literal(self, partial_truth_assignment, literal):
+        var = abs(literal)
+        if var not in partial_truth_assignment:
+            return 0
+        v = partial_truth_assignment[var]
+        if 1 <= literal <= self.n:
+            return 1 if v else -1
+        else:
+            return -1 if v else 1
+
+    def evaluate(self, partial_truth_assignment):
+        for clause in self.clauses:
+            clause_satisfied = False
+            clause_indeterminate = False
+            for literal in clause:
+                evaluation = self.evaluate_literal(partial_truth_assignment, literal)
+                if evaluation == 1:
+                    clause_satisfied = True
+                    break
+                elif evaluation == 0:
+                    clause_indeterminate = True
+            if not clause_satisfied:
+                if clause_indeterminate:
+                    return 0
+                else:
+                    return -1
+        return 1
+
+
+
+
+Notes
+
+We will use the SATInstance data structure to represent our formula.
+We will use evaluate function inside SATInstance.
+Use a python dictionary to represent partial truth assignments.
+We have provided a useful function that will help you extend a truth assignment.
+Note that modifying a dictionary inside a function also modifies it for its caller. We have provided a helpful function forget_var_in_truth_assign to remove a key from a dictionary.
+
+
+# In[3]:
+
+def extend_truth_assignment(truth_assign, j, b):
+    truth_assign[j] = b
+    return truth_assign
+    
+def forget_var_in_truth_assign(truth_assign, j):
+    if j in truth_assign:
+        del truth_assign[j]
+    return truth_assign
+
+def dpll_algorithm(formula):
+    stack = [({}, 1)]
+    while stack:
+        partial_assign, j = stack.pop()
+        if j > formula.n:
+            if formula.evaluate(partial_assign) == 1:
+                return True, partial_assign
+        else:
+            if j not in partial_assign:
+                try_true = extend_truth_assignment(dict(partial_assign), j, True)
+                try_true_eval = formula.evaluate(try_true)
+                if try_true_eval == 1:
+                    return True, try_true
+                elif try_true_eval == 0:
+                    stack.append((try_true, j + 1))
+                    
+                try_false = extend_truth_assignment(dict(partial_assign), j, False)
+                try_false_eval = formula.evaluate(try_false)
+                if try_false_eval == 1:
+                    return True, try_false
+                elif try_false_eval == 0:
+                    stack.append((try_false, j + 1))
+            else:
+                del partial_assign[j]
+                stack.append((partial_assign, j + 1))
+    return False, None
+
+def solve_formula(formula):
+    return dpll_algorithm(formula)
+
+
+2. Use SAT solver to solve 3-coloring problem.
+
+# In[7]:
+
+def is_three_coloring(graph, coloring):
+    n = graph.n
+    for i in range(n):
+        if i not in coloring:
+            return False
+        if coloring[i] < 1 or coloring[i] > 3:
+            return False
+
+    list_of_edges = graph.get_list_of_edges()
+    for edge in list_of_edges:
+        left_vert, right_vert = edge[0], edge[1]
+        left_color, right_color = coloring[left_vert], coloring[right_vert]
+        if left_color == right_color:
+            return False
+
+    return True
+
+
+
+ Implement the Translation
+
+
+# In[17]:
+
+def translate_three_coloring(graph):
+    n_boolean_vars = graph.n * 3
+    s = SATInstance(n_boolean_vars, [])
+    list_of_edges = graph.get_list_of_edges()
+    for e in list_of_edges:
+        i = e[0]
+        j = e[1]
+        s.add_clause([3*i + 1, 3*i + 2, 3*i + 3])
+        s.add_clause([3*j + 1, 3*j + 2, 3*j + 3])
+        s.add_clause([-(3*i + 1), -(3*i + 2)])
+        s.add_clause([-(3*i + 1), -(3*i + 3)])
+        s.add_clause([-(3*i + 2), -(3*i + 3)])
+        s.add_clause([-(3*i + 1), -(3*j + 1)])
+        s.add_clause([-(3*i + 2), -(3*j + 2)])
+        s.add_clause([-(3*i + 3), -(3*j + 3)])
+    return s
+
+def extract_graph_coloring_from_truth_assignment(graph, truth_assign):
+    colors = {}
+    for i in range(graph.n):
+        found_color = False
+        for j in range(1, 4):
+            if truth_assign.get(3 * i + j, False):
+                colors[i] = j
+                found_color = True
+                break
+        if not found_color:
+            raise ValueError(f"Color not found for vertex {i} in the truth assignment")
+    return colors
+
+def solve_three_coloring(graph):
+    s = translate_three_coloring(graph)
+    stack = [(s, {})]
+    while stack:
+        formula, partial_assign = stack.pop()
+        res, truth_assign = solve_formula_iterative(formula, partial_assign)
+        if res:
+            colors = extract_graph_coloring_from_truth_assignment(graph, truth_assign)
+            return colors
+    return None
+
+def solve_formula_iterative(formula, partial_assign):
+    stack = [(partial_assign, 1)]
+    while stack:
+        partial_assign, j = stack.pop()
+        if j > formula.n:
+            if formula.evaluate(partial_assign) == 1:
+                return True, partial_assign
+        else:
+            if j not in partial_assign:
+                try_true = extend_truth_assignment(dict(partial_assign), j, True)
+                try_true_eval = formula.evaluate(try_true)
+                if try_true_eval == 1:
+                    return True, try_true
+                elif try_true_eval == 0:
+                    stack.append((try_true, j + 1))
+                    
+                try_false = extend_truth_assignment(dict(partial_assign), j, False)
+                try_false_eval = formula.evaluate(try_false)
+                if try_false_eval == 1:
+                    return True, try_false
+                elif try_false_eval == 0:
+                    stack.append((try_false, j + 1))
+            else:
+                del partial_assign[j]
+                stack.append((partial_assign, j + 1))
+    return False, None
