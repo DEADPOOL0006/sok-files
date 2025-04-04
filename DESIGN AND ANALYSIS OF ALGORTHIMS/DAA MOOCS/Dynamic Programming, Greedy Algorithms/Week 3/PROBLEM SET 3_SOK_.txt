@@ -1,0 +1,81 @@
+                                                                           Programming Assignment: Problem Set 3
+
+Problem A: Calculate Makespan of an Assignment
+
+# In[1]:
+
+def compute_makespan(times, m, assign):
+    # times is an array of job times of size n
+    # m is the number of processors
+    # assign is an array of size n whose entries are between 0 to m-1 
+    # indicating th processor number for
+    # the corresponding job.
+    # Return: makespan of the assignment
+    # your code here
+    
+    total_times = [0]*m
+    n = len(times)
+    
+    for i in range(n):
+        this_processor = assign[i]
+        this_time = times[i]
+        total_times[this_processor] = total_times[this_processor] + this_time
+        
+    makespan = max(total_times)
+    return(makespan)
+
+Problem B: Implement the Greedy Makespan Algorithm
+
+# In[2]:
+
+import heapq
+
+class MinHeap:
+    def __init__(self, m):
+        self.heap = []
+        self.m = m
+        self.assigned_jobs = [[] for _ in range(m)]
+        self.makespan = 0
+
+    def add_job(self, load, job_index):
+        if len(self.heap) < self.m:
+            heapq.heappush(self.heap, (load, len(self.heap)))
+            self.assigned_jobs[len(self.heap) - 1].append(job_index)
+        else:
+            min_load, idx = heapq.heappop(self.heap)
+            new_load = min_load + load
+            heapq.heappush(self.heap, (new_load, idx))
+            self.assigned_jobs[idx].append(job_index)
+        self.update_makespan()
+
+    def update_makespan(self):
+        self.makespan = max(self.heap)[0]
+
+    def extract_assignments(self):
+        assignments = [-1] * sum(len(jobs) for jobs in self.assigned_jobs)
+        for idx, jobs in enumerate(self.assigned_jobs):
+            for job in jobs:
+                assignments[job] = idx
+        return assignments
+
+    def extract_makespan(self):
+        return self.makespan
+
+def greedy_makespan_min(times, m):
+    assert len(times) >= 1
+    assert all(elt >= 0 for elt in times)
+    assert m >= 2
+    n = len(times)
+    priorityQ = MinHeap(m)
+    for k in range(n):
+        this_load = times[k]
+        priorityQ.add_job(this_load, k)
+    assignments = priorityQ.extract_assignments()
+    makespan = priorityQ.extract_makespan()
+    return assignments, makespan
+
+def compute_makespan(times, m, assignments):
+    loads = [0] * m
+    for job_index, processor in enumerate(assignments):
+        loads[processor] += times[job_index]
+    return max(loads)
