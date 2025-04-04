@@ -1,0 +1,151 @@
+                                                                         Programming Assignment: Problem Set 2
+
+Problem 1 : Longest Stable Subsequence
+
+# In[1]:
+
+def lssLength(a, i, j):
+    aj = a[j] if 0 <= j < len(a) else None 
+    if i == len(a):
+        return 0
+    if j == -1 or (aj is not None and abs(a[i] - aj) <= 1):
+        return max(1 + lssLength(a, i + 1, i), lssLength(a, i + 1, j))
+    else:
+        return lssLength(a, i + 1, j)
+
+Part 2: Memoize the Recurrence
+
+# In[3]:
+
+def memoizeLSS(a):
+    T = {}
+    n = len(a)
+    for j in range(-1, n):
+        T[(n, j)] = 0
+    for i in range(n - 1, -1, -1):
+        for j in range(i - 1, -2, -1):
+            aj = a[j] if j >= 0 else None
+            if j == -1 or (aj is not None and abs(a[i] - aj) <= 1):
+                T[(i, j)] = max(1 + T[(i + 1, i)], T[(i + 1, j)])
+            else:
+                T[(i, j)] = T[(i + 1, j)]
+    return T
+
+Part 3: Modify Memoized Code to Recover Solution
+
+# In[5]:
+
+def memoizeLSS(a):
+    T = {}
+    n = len(a)
+    
+    for j in range(-1, n):
+        T[(n, j)] = (0, [])
+    
+    for i in range(n - 1, -1, -1):
+        for j in range(-1, n):
+            aj = a[j] if j >= 0 else None
+            if j == -1 or (aj is not None and abs(a[i] - aj) <= 1):
+                length, sequence = max((1 + T[(i + 1, i)][0], [a[i]] + T[(i + 1, i)][1]), T[(i + 1, j)], key=lambda x: x[0])
+            else:
+                length, sequence = T[(i + 1, j)]
+            T[(i, j)] = (length, sequence)
+    
+    return T
+
+def computeLSS(a):
+    T = memoizeLSS(a)
+    max_length = 0
+    max_sequence = []
+    n = len(a)
+    
+    for j in range(-1, n):
+        length, sequence = T[(0, j)]
+        if length > max_length:
+            max_length = length
+            max_sequence = sequence
+    return max_sequence
+
+def checkSubsequence(a, b):
+    i = 0
+    j = 0
+    n = len(a)
+    m = len(b)
+    for j in range(m - 1):
+        assert abs(b[j] - b[j + 1]) <= 1
+    while (i < n and j < m):
+        if a[i] == b[j]: 
+            j = j + 1
+        i = i + 1
+    if j < m:
+        return False
+    return True
+
+Problem 2
+Part (A)
+
+# In[7]:
+
+
+def targetSum(S, i, tgt):
+    if tgt < 0:
+        return float('inf')
+    elif i > len(S) - 1:
+        return abs(tgt)
+    else:
+        include_current = targetSum(S, i + 1, tgt - S[i])
+        exclude_current = targetSum(S, i + 1, tgt)
+        return min(include_current, exclude_current)
+
+Part (B)
+
+# In[9]:
+
+def memoTargetSum(S, tgt):
+    k = len(S)
+    assert tgt >= 0
+    ## Fill in base case for T[(i,j)] where i == k
+    T = {} # Memo table initialized as empty dictionary
+    for j in range(tgt+1):
+        T[(k,j)] = j
+    
+    # your code here
+    for i in range(k-1, -1, -1):
+        for j in range(tgt + 1):
+            optA = T[(i + 1, j)]
+            if j - S[i] >= 0:
+                optB = T[(i + 1, j - S[i])]
+            else:
+                optB = float('inf')
+            T[(i, j)] = min(optA, optB)
+                
+    return T
+
+
+Part (C)
+
+# In[11]:
+
+def getBestTargetSum(S, tgt):
+    k = len(S)
+    assert tgt >= 0
+    # your code here
+    j = tgt
+    i = 0
+    Table = memoTargetSum(S, tgt)
+    res = []
+    
+    while i < k:
+        currentCell = Table[(i, j)]
+        cellBelow = Table[(i + 1, j)]
+        
+        if currentCell != cellBelow:
+            #Use S[i]
+            res.append(S[i])
+            j = j - S[i]
+        
+        i = i + 1
+    
+    return res 
+
+
