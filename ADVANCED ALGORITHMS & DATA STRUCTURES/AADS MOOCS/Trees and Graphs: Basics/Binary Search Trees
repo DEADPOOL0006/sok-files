@@ -1,69 +1,94 @@
 Part 1
 
 class Node:
-    def __init__(self, k, p=None):
-        self.k = k
-        self.p = p
-        self.l = None
-        self.r = None
-        if p != None:
-            if k < p.k:
-                assert (p.l == None), 'parent has left child'
-                p.l = self
+    def __init__(self, key, parent=None):
+        self.key = key
+        self.parent = parent
+        self.left = None
+        self.right = None
+
+        if parent is not None:
+            if key < parent.key:
+                assert parent.left is None, 'parent already has left child'
+                parent.left = self
             else:
-                assert k > p.k, 'duplicate key'
-                assert (p.r == None), 'parent has right child'
-                p.r = self
+                assert key > parent.key, 'duplicate key'
+                assert parent.right is None, 'parent already has right child'
+                parent.right = self
 
     def get_leftmost(self):
-        if self.l != None:
-            return self.l.get_leftmost()
+        if self.left:
+            return self.left.get_leftmost()
         return self
 
     def search(self, k):
-        if self.k == k:
-            return (True, self)
-        if k < self.k and self.l != None:
-            return self.l.search(k)
-        if k > self.k and self.r != None:
-            return self.r.search(k)
-        return (False, self)
+        if self.key == k:
+            return True, self
+        if k < self.key and self.left:
+            return self.left.search(k)
+        if k > self.key and self.right:
+            return self.right.search(k)
+        return False, self  # return closest parent where node would be inserted
 
     def insert(self, k):
-        (f, p) = self.search(k)
-        if f:
+        found, node = self.search(k)
+        if found:
             return None
-        if k < p.k:
-            return Node(k, p)
-        return Node(k, p)
+        if k < node.key:
+            return Node(k, node)
+        return Node(k, node)
 
     def height(self):
-        l_h = self.l.height() if self.l else 0
-        r_h = self.r.height() if self.r else 0
-        return 1 + max(l_h, r_h)
+        left_height = self.left.height() if self.left else 0
+        right_height = self.right.height() if self.right else 0
+        return 1 + max(left_height, right_height)
 
     def delete(self, k):
-        (f, n) = self.search(k)
-        assert (f == True), f"key:{k}- not found"
+        found, node = self.search(k)
+        assert found, f"key:{k} not found"
 
-        def replace(p, o, n):
-            if p.l == o:
-                p.l = n
+        def replace(parent, old_child, new_child):
+            if parent:
+                if parent.left == old_child:
+                    parent.left = new_child
+                else:
+                    parent.right = new_child
+            if new_child:
+                new_child.parent = parent
+
+        # Case 1: No children
+        if node.left is None and node.right is None:
+            if node.parent:
+                replace(node.parent, node, None)
             else:
-                p.r = n
-            if n != None:
-                n.p = p
+                # Root deletion with no children: tricky, not handled in the problem setup
+                pass
 
-        if n.l == None and n.r == None:
-            if n.p != None:
-                replace(n.p, n, None)
-        elif n.l == None or n.r == None:
-            c = n.l if n.l else n.r
-            replace(n.p, n, c)
+        # Case 2: One child
+        elif node.left is None or node.right is None:
+            child = node.left if node.left else node.right
+            if node.parent:
+                replace(node.parent, node, child)
+            else:
+                # Replace root node's values
+                node.key = child.key
+                node.left = child.left
+                node.right = child.right
+                if node.left:
+                    node.left.parent = node
+                if node.right:
+                    node.right.parent = node
+
+        # Case 3: Two children
         else:
-            s = n.r.get_leftmost()
-            n.k = s.k
-            replace(s.p, s, s.r)
+            successor = node.right.get_leftmost()
+            node.key = successor.key
+            # Now delete the successor node
+            if successor.parent.left == successor:
+                replace(successor.parent, successor, successor.right)
+            else:
+                # Successor is the right child of node to be deleted
+                replace(successor.parent, successor, successor.right)
 
 
 
@@ -71,50 +96,51 @@ Part 2
 
 import random
 
-class x1:
-    def __init__(x2, x3):
-        x2.x3 = x3
-        x2.x4 = None
-        x2.x5 = None
+class Node:
+    def __init__(self, key):
+        self.key = key
+        self.left = None
+        self.right = None
 
-class x6:
-    def __init__(x7):
-        x7.x8 = None
+class BST:
+    def __init__(self):
+        self.root = None
 
-    def x9(x7, x10):
-        if not x7.x8:
-            x7.x8 = x1(x10)
+    def insert(self, key):
+        if not self.root:
+            self.root = Node(key)
         else:
-            x7._x9(x7.x8, x10)
+            self._insert(self.root, key)
 
-    def _x9(x7, x11, x10):
-        if x10 < x11.x3:
-            if not x11.x4:
-                x11.x4 = x1(x10)
+    def _insert(self, node, key):
+        if key < node.key:
+            if not node.left:
+                node.left = Node(key)
             else:
-                x7._x9(x11.x4, x10)
+                self._insert(node.left, key)
         else:
-            if not x11.x5:
-                x11.x5 = x1(x10)
+            if not node.right:
+                node.right = Node(key)
             else:
-                x7._x9(x11.x5, x10)
+                self._insert(node.right, key)
 
-    def x12(x7):
-        return x7._x12(x7.x8)
+    def height(self):
+        return self._height(self.root)
 
-    def _x12(x7, x11):
-        if not x11:
+    def _height(self, node):
+        if not node:
             return 0
-        return 1 + max(x7._x12(x11.x4), x7._x12(x11.x5))
+        return 1 + max(self._height(node.left), self._height(node.right))
 
-def x13(n):
-    x14 = list(range(n))
-    random.shuffle(x14)
-    x15 = x6()
-    for x16 in x14:
-        x15.x9(x16)
-    return x15.x12()
+def build_random_bst(n):
+    keys = list(range(n))
+    random.shuffle(keys)
+    tree = BST()
+    for key in keys:
+        tree.insert(key)
+    return tree.height()
 
-def x17(n, t):
-    x18 = [x13(n) for _ in range(t)]
-    return (sum(x18) / len(x18), x18)
+def run_multiple_trials(n, t):
+    depths = [build_random_bst(n) for _ in range(t)]
+    return (sum(depths) / len(depths), depths)
+
