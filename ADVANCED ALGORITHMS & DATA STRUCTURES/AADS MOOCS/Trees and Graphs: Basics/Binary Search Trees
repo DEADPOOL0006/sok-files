@@ -1,0 +1,120 @@
+Part 1
+
+class Node:
+    def __init__(self, k, p=None):
+        self.k = k
+        self.p = p
+        self.l = None
+        self.r = None
+        if p != None:
+            if k < p.k:
+                assert (p.l == None), 'parent has left child'
+                p.l = self
+            else:
+                assert k > p.k, 'duplicate key'
+                assert (p.r == None), 'parent has right child'
+                p.r = self
+
+    def get_leftmost(self):
+        if self.l != None:
+            return self.l.get_leftmost()
+        return self
+
+    def search(self, k):
+        if self.k == k:
+            return (True, self)
+        if k < self.k and self.l != None:
+            return self.l.search(k)
+        if k > self.k and self.r != None:
+            return self.r.search(k)
+        return (False, self)
+
+    def insert(self, k):
+        (f, p) = self.search(k)
+        if f:
+            return None
+        if k < p.k:
+            return Node(k, p)
+        return Node(k, p)
+
+    def height(self):
+        l_h = self.l.height() if self.l else 0
+        r_h = self.r.height() if self.r else 0
+        return 1 + max(l_h, r_h)
+
+    def delete(self, k):
+        (f, n) = self.search(k)
+        assert (f == True), f"key:{k}- not found"
+
+        def replace(p, o, n):
+            if p.l == o:
+                p.l = n
+            else:
+                p.r = n
+            if n != None:
+                n.p = p
+
+        if n.l == None and n.r == None:
+            if n.p != None:
+                replace(n.p, n, None)
+        elif n.l == None or n.r == None:
+            c = n.l if n.l else n.r
+            replace(n.p, n, c)
+        else:
+            s = n.r.get_leftmost()
+            n.k = s.k
+            replace(s.p, s, s.r)
+
+
+
+Part 2
+
+import random
+
+class x1:
+    def __init__(x2, x3):
+        x2.x3 = x3
+        x2.x4 = None
+        x2.x5 = None
+
+class x6:
+    def __init__(x7):
+        x7.x8 = None
+
+    def x9(x7, x10):
+        if not x7.x8:
+            x7.x8 = x1(x10)
+        else:
+            x7._x9(x7.x8, x10)
+
+    def _x9(x7, x11, x10):
+        if x10 < x11.x3:
+            if not x11.x4:
+                x11.x4 = x1(x10)
+            else:
+                x7._x9(x11.x4, x10)
+        else:
+            if not x11.x5:
+                x11.x5 = x1(x10)
+            else:
+                x7._x9(x11.x5, x10)
+
+    def x12(x7):
+        return x7._x12(x7.x8)
+
+    def _x12(x7, x11):
+        if not x11:
+            return 0
+        return 1 + max(x7._x12(x11.x4), x7._x12(x11.x5))
+
+def x13(n):
+    x14 = list(range(n))
+    random.shuffle(x14)
+    x15 = x6()
+    for x16 in x14:
+        x15.x9(x16)
+    return x15.x12()
+
+def x17(n, t):
+    x18 = [x13(n) for _ in range(t)]
+    return (sum(x18) / len(x18), x18)
