@@ -1,0 +1,191 @@
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+
+# Vertex class to represent each vertex in the graph
+class Vertex:
+    def __init__(self, i, j):
+        self.x = i  # The x coordinate
+        self.y = j  # The y coordinate
+        self.d = float('inf')  # The shortest path estimate
+        self.processed = False  # Has this vertex's final shortest path distance been computed
+        self.idx_in_priority_queue = -1  # The index of this vertex in the queue
+        self.pi = None  # The parent vertex in the shortest path tree.
+
+    def reset(self):
+        self.d = float('inf')
+        self.processed = False
+        self.idx_in_priority_queue = -1
+        self.pi = None
+
+# Priority Queue class for Dijkstra's algorithm
+class PriorityQueue:
+    def __init__(self):
+        self.q = [None]  # Pad it with one element
+
+    def insert(self, v):
+        n = len(self.q)
+        self.q.append(v)
+        v.idx_in_priority_queue = n
+        self.bubble_up(n)
+
+    def swap(self, i, j):
+        self.q[i], self.q[j] = self.q[j], self.q[i]
+        self.q[i].idx_in_priority_queue = i
+        self.q[j].idx_in_priority_queue = j
+
+    def bubble_up(self, j):
+        if j == 1:
+            return
+        parent_idx = j // 2
+        if self.q[j].d < self.q[parent_idx].d:
+            self.swap(j, parent_idx)
+            self.bubble_up(parent_idx)
+
+    def bubble_down(self, j):
+        n = len(self.q)
+        left_child_idx = 2 * j
+        right_child_idx = 2 * j + 1
+        if left_child_idx >= n:
+            return
+        if right_child_idx >= n:
+            child_idx = left_child_idx
+        else:
+            child_idx = left_child_idx if self.q[left_child_idx].d < self.q[right_child_idx].d else right_child_idx
+        if self.q[j].d > self.q[child_idx].d:
+            self.swap(j, child_idx)
+            self.bubble_down(child_idx)
+
+    def get_and_delete_min(self):
+        n = len(self.q)
+        assert n > 1
+        v = self.q[1]
+        if n > 2:
+            self.q[1] = self.q[n - 1]
+            self.q[n - 1].idx_in_priority_queue = 1
+            del self.q[n - 1]
+            self.bubble_down(1)
+        return v
+
+    def is_empty(self):
+        return len(self.q) == 1
+
+    def update_vertex_weight(self, v):
+        j = v.idx_in_priority_queue
+        self.bubble_down(j)
+        self.bubble_up(j)
+
+# Dummy graph class to represent the graph
+class DummyGraphClass:
+    def __init__(self, adj_list, verts):
+        self.verts = verts
+        self.adj_list = adj_list
+
+    def get_vertex_from_coords(self, i, j):
+        assert (i, j) in self.verts
+        return self.verts[(i, j)]
+
+    def get_list_of_neighbors(self, vert):
+        coords = (vert.x, vert.y)
+        if coords in self.adj_list:
+            return self.adj_list[(vert.x, vert.y)]
+        else:
+            return []
+
+# Function to connect nodes in the graph
+def connect_nodes(src, dest, weight):
+    v1 = src
+    v2 = verts[dest]
+    if v1 in adj_list:
+        adj_list[v1].append((v2, weight))
+    else:
+        adj_list[v1] = [(v2, weight)]
+
+# Function to compute the shortest path using Dijkstra's algorithm
+def computeShortestPath(graph, source_coordinates, dest_coordinates):
+    pq = PriorityQueue()
+    source_vertex = graph.get_vertex_from_coords(*source_coordinates)
+    dest_vertex = graph.get_vertex_from_coords(*dest_coordinates)
+
+    source_vertex.d = 0
+    pq.insert(source_vertex)
+
+    while not pq.is_empty():
+        current_vertex = pq.get_and_delete_min()
+        current_vertex.processed = True
+
+        if (current_vertex.x, current_vertex.y) == (dest_vertex.x, dest_vertex.y):
+            path = []
+            while current_vertex is not None:
+                path.append((current_vertex.x, current_vertex.y))
+                current_vertex = current_vertex.pi
+            return path[::-1], dest_vertex.d  # Return reversed path and distance
+
+        for neighbor, weight in graph.get_list_of_neighbors(current_vertex):
+            if neighbor.processed:
+                continue
+
+            new_distance = current_vertex.d + weight
+            if new_distance < neighbor.d:
+                neighbor.d = new_distance
+                neighbor.pi = current_vertex
+                if neighbor.idx_in_priority_queue == -1:
+                    pq.insert(neighbor)
+                else:
+                    pq.update_vertex_weight(neighbor)
+
+    return [], float('inf')  # No path found
+
+# Test 1
+verts = {(i, j): Vertex(i, j) for i in range(3) for j in range(3)}
+adj_list = {}
+connect_nodes((0, 0), (0, 1), 1.0)
+connect_nodes((0, 0), (1, 0), 0.5)
+connect_nodes((1, 0), (0, 1), 0.5)
+connect_nodes((0, 1), (0, 0), 0.5)
+connect_nodes((1, 0), (1, 1), 0.5)
+connect_nodes((1, 1), (2, 2), 0.25)
+connect_nodes((1, 1), (1, 2), 0.5)
+connect_nodes((1, 1), (2, 1), 1.2)
+connect_nodes((2, 1), (2, 2), 0.25)
+connect_nodes((1, 2), (2, 2), 0.25)
+
+graph = DummyGraphClass(adj_list, verts)
+
+# Test the shortest path from (0,0) to (2,2)
+path, dist = computeShortestPath(graph, (0, 0), (2, 2))
+print(path)
+
+assert dist == 1.25, 'Shortest path distance from (0,0) to (2,2) must be 1.25'
+assert path == [(0, 0), (1, 0), (1, 1), (2, 2)]
+
+# Reset vertices for the next test
+for (_, v) in verts.items():
+    v.reset()
+
+# Test the shortest path from (0,0) to (1,2)
+graph2 = DummyGraphClass(adj_list, verts)
+path2, dist2 = computeShortestPath(graph2, (0, 0), (1, 2))
+print(path2)
+assert dist2 == 1.5, 'Shortest path distance from (0,0) to (1,2) must be 1.5'
+assert path2[0] == (0, 0)
+assert path2[-1] == (1, 2)
+
+# Reset vertices for the next test
+for (_, v) in verts.items():
+    v.reset()
+
+# Connect additional nodes for the next test
+connect_nodes((2, 2), (2, 1), 0.5)
+connect_nodes((2, 1), (1, 1), 1.0)
+connect_nodes((1, 1), (0, 1), 0.5)
+
+# Test the shortest path from (2,2) to (0,0)
+graph3 = DummyGraphClass(adj_list, verts)
+path3, dist3 = computeShortestPath(graph3, (2, 2), (0, 0))
+print(path3)
+assert dist3 == 2.5, 'Shortest path distance from (2,2) to (0,0) must be 2.5'
+assert path3[0] == (2, 2)
+assert path3[-1] == (0, 0)
+
+print('All tests passed: 15 points!')
