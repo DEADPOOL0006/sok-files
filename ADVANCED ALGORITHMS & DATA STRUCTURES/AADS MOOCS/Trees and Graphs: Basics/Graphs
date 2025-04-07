@@ -1,0 +1,111 @@
+1 B
+
+class DFSTimeCounter:
+    def __init__(self):
+        self.count = 0
+    
+    def reset(self):
+        self.count = 0
+    
+    def increment(self):
+        self.count += 1
+        
+    def get(self):
+        return self.count 
+    
+class UndirectedGraph:
+    def __init__(self, n):
+        self.n = n
+        self.adj_list = [set() for _ in range(self.n)]
+        
+    def add_edge(self, i, j):
+        assert 0 <= i < self.n
+        assert 0 <= j < self.n
+        assert i != j
+        self.adj_list[i].add(j)
+        self.adj_list[j].add(i)
+        
+    def get_neighboring_vertices(self, i):
+        assert 0 <= i < self.n
+        return self.adj_list[i]
+    
+    def dfs_visit(self, i, dfs_timer, discovery_times, finish_times, 
+                  dfs_tree_parent, dfs_back_edges):
+        assert 0 <= i < self.n
+        assert discovery_times[i] is None
+        assert finish_times[i] is None
+
+        discovery_times[i] = dfs_timer.get()
+        dfs_timer.increment()
+
+        for neighbor in self.adj_list[i]:
+            if discovery_times[neighbor] is None:  # Tree Edge
+                dfs_tree_parent[neighbor] = i
+                self.dfs_visit(neighbor, dfs_timer, discovery_times, finish_times, 
+                               dfs_tree_parent, dfs_back_edges)
+            elif finish_times[neighbor] is None and dfs_tree_parent[i] != neighbor:  # Back Edge
+                dfs_back_edges.append((i, neighbor))
+        
+        finish_times[i] = dfs_timer.get()
+        dfs_timer.increment()
+    
+    def dfs_traverse_graph(self):
+        dfs_timer = DFSTimeCounter()
+        discovery_times = [None] * self.n
+        finish_times = [None] * self.n
+        dfs_tree_parents = [None] * self.n
+        dfs_back_edges = []
+        
+        for i in range(self.n):
+            if discovery_times[i] is None:
+                self.dfs_visit(i, dfs_timer, discovery_times, finish_times, 
+                               dfs_tree_parents, dfs_back_edges)
+        
+        non_trivial_back_edges = [(i, j) for (i, j) in dfs_back_edges if dfs_tree_parents[i] != j]
+        
+        return dfs_tree_parents, non_trivial_back_edges, discovery_times, finish_times
+
+
+
+1 C
+
+def num_connected_components(g):
+    def dfs(node, visited):
+        stack = [node]
+        while stack:
+            curr = stack.pop()
+            for neighbor in g.adj_list[curr]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    stack.append(neighbor)
+    
+    visited = set()
+    components = 0
+    for node in range(g.n):
+        if node not in visited:
+            visited.add(node)
+            dfs(node, visited)
+            components += 1
+    
+    return components
+
+
+1C
+
+ def find_all_nodes_in_cycle(self):
+        nodes_in_cycle = set()
+        dfs_tree_parent, back_edges, _, _ = self.dfs_traverse_graph()
+        
+        def trace_cycle(start, end):
+            cycle_nodes = set()
+            while start != end:
+                cycle_nodes.add(start)
+                start = dfs_tree_parent[start]
+            cycle_nodes.add(end)
+            return cycle_nodes
+        
+        for u, v in back_edges:
+            nodes_in_cycle.update(trace_cycle(u, v))
+        
+        return nodes_in_cycle
+
