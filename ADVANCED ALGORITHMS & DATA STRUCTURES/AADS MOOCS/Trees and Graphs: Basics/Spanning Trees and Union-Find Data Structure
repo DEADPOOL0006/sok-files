@@ -1,0 +1,182 @@
+Problem 1
+
+class DisjointForests:
+    def __init__(self, n):
+        assert n >= 1, 'Empty disjoint forest is disallowed'
+        self.n = n
+        self.parents = [None]*n
+        self.rank = [None]*n
+
+    def dictionary_of_sets(self):
+        d = {}
+        for i in range(self.n):
+            if self.is_representative(i):
+                d[i] = set([i])
+        for j in range(self.n):
+            if self.parents[j] is not None:
+                root = self.find(j)
+                assert root in d
+                d[root].add(j)
+        return d
+
+    def make_set(self, j):
+        assert 0 <= j < self.n
+        assert self.parents[j] is None, 'You are calling make_set on an element multiple times -- not allowed.'
+        self.parents[j] = j
+        self.rank[j] = 1
+
+    def is_representative(self, j):
+        return self.parents[j] == j 
+
+    def get_rank(self, j):
+        return self.rank[j]
+
+    def find(self, j):
+        assert 0 <= j < self.n
+        assert self.parents[j] is not None, 'You are calling find on an element that is not part of the family yet. Please call make_set first.'
+        
+        if self.parents[j] != j:
+            self.parents[j] = self.find(self.parents[j])  # path compression
+        return self.parents[j]
+
+    def union(self, j1, j2):
+        assert 0 <= j1 < self.n
+        assert 0 <= j2 < self.n
+        assert self.parents[j1] is not None
+        assert self.parents[j2] is not None
+
+        root1 = self.find(j1)
+        root2 = self.find(j2)
+
+        if root1 == root2:
+            return  # already in the same set
+
+        # Union by rank
+        if self.rank[root1] > self.rank[root2]:
+            self.parents[root2] = root1
+        elif self.rank[root1] < self.rank[root2]:
+            self.parents[root1] = root2
+        else:
+            self.parents[root2] = root1  # break ties in favor of root1
+            self.rank[root1] += 1
+
+
+
+2A
+
+# DisjointForests class — make sure this is defined
+class DisjointForests:
+    def __init__(self, n):
+        assert n >= 1, 'Empty disjoint forest is disallowed'
+        self.n = n
+        self.parents = [None]*n
+        self.rank = [None]*n
+
+    def dictionary_of_sets(self):
+        d = {}
+        for i in range(self.n):
+            if self.is_representative(i):
+                d[i] = set([i])
+        for j in range(self.n):
+            if self.parents[j] is not None:
+                root = self.find(j)
+                assert root in d
+                d[root].add(j)
+        return d
+
+    def make_set(self, j):
+        assert 0 <= j < self.n
+        assert self.parents[j] is None, 'You are calling make_set on an element multiple times -- not allowed.'
+        self.parents[j] = j
+        self.rank[j] = 1
+
+    def is_representative(self, j):
+        return self.parents[j] == j 
+
+    def get_rank(self, j):
+        return self.rank[j]
+
+    def find(self, j):
+        assert 0 <= j < self.n
+        assert self.parents[j] is not None, 'You are calling find on an element that is not part of the family yet. Please call make_set first.'
+        
+        if self.parents[j] != j:
+            self.parents[j] = self.find(self.parents[j])  # path compression
+        return self.parents[j]
+
+    def union(self, j1, j2):
+        assert 0 <= j1 < self.n
+        assert 0 <= j2 < self.n
+        assert self.parents[j1] is not None
+        assert self.parents[j2] is not None
+
+        root1 = self.find(j1)
+        root2 = self.find(j2)
+
+        if root1 == root2:
+            return
+
+        if self.rank[root1] > self.rank[root2]:
+            self.parents[root2] = root1
+        elif self.rank[root1] < self.rank[root2]:
+            self.parents[root1] = root2
+        else:
+            self.parents[root2] = root1
+            self.rank[root1] += 1
+
+# UndirectedGraph class
+class UndirectedGraph:
+    def __init__(self, n):
+        self.n = n
+        self.edges = []
+
+    def add_edge(self, u, v, w):
+        self.edges.append((u, v, w))
+        self.edges.append((v, u, w))  # Since undirected
+
+# compute_scc function
+def compute_scc(g, threshold):
+    d = DisjointForests(g.n)
+
+    for v in range(g.n):
+        d.make_set(v)
+
+    for u, v, w in g.edges:
+        if w <= threshold:
+            d.union(u, v)
+
+    return d.dictionary_of_sets()
+
+
+
+2B
+
+def compute_mst(g):
+    # Step 1: Initialize Disjoint Set Forest
+    d = DisjointForests(g.n)
+
+    # Step 2: Initialize MST results
+    mst_edges = []  # List to store edges in the MST
+    mst_weight = 0   # Total weight of the MST
+
+    # Step 3: Sort edges in ascending order of weight
+    g.edges.sort(key=lambda edge: edge[2])
+
+    # Step 4: Make each node a separate set
+    for v in range(g.n):
+        d.make_set(v)
+
+    # Step 5: Process edges and construct MST
+    for u, v, w in g.edges:
+        if d.find(u) != d.find(v):
+            d.union(u, v)
+            mst_edges.append((u, v, w))
+            mst_weight += w
+
+    return (mst_edges, mst_weight)
+
+    
+    # Step 6: Return MST edges and total weight
+    return (mst_edges, mst_weight)
+
+
