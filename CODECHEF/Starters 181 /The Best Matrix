@@ -1,57 +1,52 @@
-//c ( CODE )
+//c++ ( CODE )
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <iostream>
+#include <vector>
+#include <map>
+#include <climits>
 
-#define sok1(a, b) ((a) > (b) ? (a) : (b))
+using namespace std;
 
-void sok2() {
-    int sok3, sok4;
-    scanf("%d %d", &sok3, &sok4);
-
-    int sok5[sok3][sok4];
-    for (int sok6 = 0; sok6 < sok3; sok6++) {
-        for (int sok7 = 0; sok7 < sok4; sok7++) {
-            scanf("%d", &sok5[sok6][sok7]);
+void sok1() {
+    int sok2, sok3;
+    cin >> sok2 >> sok3;
+    vector<vector<int>> sok4(sok2, vector<int>(sok3));
+    for (int sok5 = 0; sok5 < sok2; ++sok5) {
+        for (int sok6 = 0; sok6 < sok3; ++sok6) {
+            cin >> sok4[sok5][sok6];
         }
     }
 
-    int sok8 = sok3 * sok4;
+    int sok7 = sok2 * sok3;
+    int sok8[] = {1, -1};
     int sok9[] = {1, -1};
-    int sok10[] = {1, -1};
 
-    for (int sok11 = 0; sok11 < 2; sok11++) {
-        for (int sok12 = 0; sok12 < 2; sok12++) {
-            int sok13 = 1000000;
-            int *sok14 = (int *)calloc(sok13, sizeof(int));
-            int sok15 = sok13 / 2;
-            int sok16 = 0;
+    for (int sok10 : sok8) {
+        for (int sok11 : sok9) {
+            map<int, int> sok12;
+            int sok13 = 0;
 
-            for (int sok17 = 0; sok17 < sok3; sok17++) {
-                for (int sok18 = 0; sok18 < sok4; sok18++) {
-                    int sok19 = sok5[sok17][sok18] - sok17 * sok10[sok12] - sok18 * sok9[sok11];
-                    int sok20 = sok19 + sok15;
-                    sok14[sok20]++;
-                    sok16 = sok1(sok16, sok14[sok20]);
+            for (int sok14 = 0; sok14 < sok2; ++sok14) {
+                for (int sok15 = 0; sok15 < sok3; ++sok15) {
+                    int sok16 = sok4[sok14][sok15] - sok14 * sok11 - sok15 * sok10;
+                    sok12[sok16]++;
+                    sok13 = max(sok13, sok12[sok16]);
                 }
             }
 
-            int sok21 = sok3 * sok4 - sok16;
-            sok8 = (sok8 < sok21) ? sok8 : sok21;
-
-            free(sok14);
+            int sok17 = sok2 * sok3 - sok13;
+            sok7 = min(sok7, sok17);
         }
     }
 
-    printf("%d\n", sok8);
+    cout << sok7 << endl;
 }
 
 int main() {
-    int sok22;
-    scanf("%d", &sok22);
-    while (sok22--) {
-        sok2();
+    int sok18;
+    cin >> sok18;
+    while (sok18--) {
+        sok1();
     }
     return 0;
 }
