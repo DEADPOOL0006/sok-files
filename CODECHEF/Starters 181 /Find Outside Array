@@ -1,55 +1,28 @@
 #Python3 ( CODE )
 
 import sys
-
-def solve():
+def main():
     sok1 = sys.stdin.read().split()
-    sok2 = 0
-    sok3 = int(sok1[sok2])
-    sok2 += 1
-    for sok4 in range(sok3):
-        sok5 = int(sok1[sok2])
-        sok2 += 1
-        sok6 = list(map(int, sok1[sok2:sok2+sok5]))
-        sok2 += sok5
-        
-        if sok5 == 1:
-            sok7 = sok6[0] * 2
-            if sok7 != sok6[0]:
-                print(sok6[0], sok6[0])
+    sok2 = int(sok1[0])
+    sok3 = 1
+    sok4 = []
+    for sok5 in range(sok2):
+        sok6 = int(sok1[sok3])
+        sok3 += 1
+        sok7 = list(map(int, sok1[sok3:sok3+sok6]))
+        sok3 += sok6
+        sok8 = set(sok7)
+        if sok8 == {0}:
+            sok4.append("-1")
+        else:
+            sok9 = max(sok8)
+            if sok9 > 0:
+                sok4.append(f"{sok9} {sok9}")
             else:
-                print(-1)
-            continue
-        
-        sok8 = min(sok6)
-        sok9 = max(sok6)
-        
-        sok10 = sok8 + sok8
-        sok11 = sok9 + sok9
-        sok12 = sok8 + sok9
-        
-        sok13 = None
-        sok14 = set(sok6)
-        if sok10 not in sok14:
-            sok13 = (sok8, sok8)
-        elif sok11 not in sok14:
-            sok13 = (sok9, sok9)
-        elif sok12 not in sok14:
-            sok13 = (sok8, sok9)
-        else:
-            sok13 = None
-            sok15 = min(200, sok5)
-            for sok16 in range(sok15):
-                for sok17 in range(sok15):
-                    sok18 = sok6[sok16] + sok6[sok17]
-                    if sok18 not in sok14:
-                        sok13 = (sok6[sok16], sok6[sok17])
-                        break
-                if sok13 is not None:
-                    break
-        if sok13 is not None:
-            print(sok13[0], sok13[1])
-        else:
-            print(-1)
+                sok10 = min(sok8)
+                sok4.append(f"{sok10} {sok10}")
+    sys.stdout.write("\n".join(sok4))
 
-solve()
+if __name__ == "__main__":
+    main()
+
