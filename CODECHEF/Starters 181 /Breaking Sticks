@@ -16,7 +16,7 @@ int main() {
     for (int sok4 = 0; sok4 < sok3; sok4++) {
         int sok5;
         scanf("%d", &sok5);
-        getchar(); // Consume newline
+        getchar(); 
 
         char sok6[1000];
         fgets(sok6, sizeof(sok6), stdin);
