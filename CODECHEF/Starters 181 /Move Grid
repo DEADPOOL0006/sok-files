@@ -1,2 +1,3 @@
 #Python3 ( CODE )
+
 sok1,sok2,sok3,sok4=map(int,input().split());print(sok1-sok3,sok2-sok4)
