@@ -1,0 +1,18 @@
+def solve():
+    sok1 = int(input())
+    for sok2 in range(sok1):
+        sok3 = int(input())
+        sok4 = input().strip()
+        sok5 = 0
+        sok6 = 0
+        sok7 = 0
+        for sok8 in range(sok3):
+            if sok4[sok8] == '0':
+                sok5 += 1
+            else:
+                sok6 += 1
+            if sok5 == sok6:
+                sok7 += 1
+        print(2 ** sok7 if sok7 > 0 else 1)
+
+solve()
