@@ -1,0 +1,37 @@
+//C ( CODE )
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int sok1(int sok2) {
+    return (sok2 > 0) ? (sok2 - 1) : 0;
+}
+
+int main() {
+    int sok3;
+    scanf("%d", &sok3);
+    getchar();
+
+    for (int sok4 = 0; sok4 < sok3; sok4++) {
+        int sok5;
+        scanf("%d", &sok5);
+        getchar(); // Consume newline
+
+        char sok6[1000];
+        fgets(sok6, sizeof(sok6), stdin);
+
+        int sok7 = 0;
+        char *sok8 = strtok(sok6, " ");
+
+        while (sok8 != NULL) {
+            int sok9 = atoi(sok8);
+            sok7 += sok1(sok9);
+            sok8 = strtok(NULL, " ");
+        }
+
+        printf("%d\n", sok7);
+    }
+
+    return 0;
+}
