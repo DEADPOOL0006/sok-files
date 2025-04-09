@@ -1,3 +1,5 @@
+#Python3 ( CODE )
+
 def solve():
     sok1 = int(input())
     for sok2 in range(sok1):
