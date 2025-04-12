@@ -7,7 +7,9 @@
 ## 📖 Steps to Follow
 
 ### 🛠 1. Install Edulink Extension
-- 📥 Download and install the Edulink extension on your laptop from [here](https://chromewebstore.google.com/detail/edulink/jaancmhabndmklabnmmopalkjednaphj).
+- 📥 Download and install the Edulink extension on your laptop from the link below:
+
+[![Download Edulink](https://img.shields.io/badge/Download%20Edulink-Click%20Here-blue?style=for-the-badge)](https://chromewebstore.google.com/detail/edulink/jaancmhabndmklabnmmopalkjednaphj)
 
 ### 🌐 2. Open Peer Grading Page
 - 📄 Navigate to the Coursera peer grading page for your assignment.
