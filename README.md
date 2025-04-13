@@ -1,7 +1,7 @@
 # ✨ SOK Files ✨
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/47540fe4-337b-4bef-be5e-a433dafd60cf" alt="SOK Files" width="400"/>
+  <img src="https://github.com/user-attachments/assets/47540fe4-337b-4bef-be5e-a433dafd60cf" alt="SOK Files" width="300"/>
 </p>
 
 ## 📖 About
