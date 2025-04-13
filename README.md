@@ -12,7 +12,7 @@ Stay connected with the latest updates and discussions by joining our Telegram g
 
 <p align="center">
   <a href="https://t.me/students_of_klu">
-    <img src="https://img.shields.io/badge/Telegram-Join%20Now-blue?logo=telegram" alt="Join Telegram" style="font-size: 20px; padding: 10px 20px;"/>
+    <img src="https://img.shields.io/badge/Telegram-Join%20Now-blue?logo=telegram" alt="Join Telegram" style="width: 300px; height: auto;" />
   </a>
 </p>
 
