@@ -12,7 +12,7 @@ Stay connected with the latest updates and discussions by joining our Telegram g
 
 <p align="center">
   <a href="https://t.me/students_of_klu">
-    <img src="https://img.shields.io/badge/Telegram-Join%20Now-blue?logo=telegram" alt="Join Telegram" style="width: 250px; height: auto;" />
+    <img src="https://img.shields.io/badge/Telegram-Join%20Now-blue?logo=telegram" alt="Join Telegram" style="width: 220px; height: auto;" />
   </a>
 </p>
 
@@ -29,5 +29,5 @@ If you find this repository useful, consider giving it a **star ⭐** and contri
 🚀 *Happy Learning!*
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/f40a4b2a-eb05-4535-a394-12bfd7e423e8" alt="Happy Learning" width="400"/>
+  <img src="https://github.com/user-attachments/assets/f40a4b2a-eb05-4535-a394-12bfd7e423e8" alt="Happy Learning" width="450"/>
 </p>
