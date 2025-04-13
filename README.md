@@ -25,4 +25,10 @@ Stay connected with the latest updates and discussions by joining our Telegram g
 If you find this repository useful, consider giving it a **star ⭐** and contributing!
 
 ---
-🚀 *Happy Learning!*
+<div align="center">
+
+🚀 <strong>Happy Learning!</strong>  
+<br/>
+<img src="https://github.com/user-attachments/assets/d73e7d65-8730-4b5d-be08-231704f0cf55" width="400"/>
+
+</div>
