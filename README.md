@@ -25,6 +25,9 @@ Stay connected with the latest updates and discussions by joining our Telegram g
 If you find this repository useful, consider giving it a **star ⭐** and contributing!
 
 ---
+
 🚀 *Happy Learning!*
 
-![Happy Learning](https://github.com/user-attachments/assets/f40a4b2a-eb05-4535-a394-12bfd7e423e8)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f40a4b2a-eb05-4535-a394-12bfd7e423e8" alt="Happy Learning" width="200"/>
+</p>
