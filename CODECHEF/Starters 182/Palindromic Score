@@ -1,0 +1,29 @@
+//C ( CODE )
+
+#include <stdio.h>
+
+long long palScore(long long sok1, long long sok2) {
+    if(sok1 == 0 || sok2 == 0 || (sok1 % 2 == 0 || sok2 % 2 == 0))
+        return sok1 + sok2;
+    return sok1 + sok2 - 1;
+}
+
+int main(){
+    int sok3;
+    scanf("%d", &sok3);
+    while(sok3--){
+        long long sok4, sok5, sok6;
+        scanf("%lld %lld %lld", &sok4, &sok5, &sok6);
+        
+        long long sok7 = palScore(sok5, sok6);
+        long long sok8 = palScore(sok4, sok6);
+        long long sok9 = palScore(sok4, sok5);
+        
+        long long sok10 = sok7;
+        if(sok8 < sok10) sok10 = sok8;
+        if(sok9 < sok10) sok10 = sok9;
+        
+        printf("%lld\n", sok10);
+    }
+    return 0;
+}
