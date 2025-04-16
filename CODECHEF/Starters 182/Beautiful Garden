@@ -1,0 +1,19 @@
+#Python3 ( CODE )
+
+import sys
+input = sys.stdin.readline
+
+sok1 = int(input())
+
+for _ in range(sok1):
+    sok2, sok3, sok4 = map(int, input().split())
+    sok5 = list(map(int, input().split()))
+
+    if sok3 >= sok2:
+        print(0)
+    else:
+        sok5.sort()
+        sok6 = 0
+        for sok7 in range(sok2 - sok3):
+            sok6 += (sok4 - 1) // sok5[sok7] + 1
+        print(sok6)
