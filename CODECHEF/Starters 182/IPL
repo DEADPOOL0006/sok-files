@@ -1,0 +1,3 @@
+#Python3 ( CODE )
+
+print("THALA" if int(input()) >= 7 else "BOOM")
