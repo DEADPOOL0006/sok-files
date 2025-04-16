@@ -1,0 +1,29 @@
+//C ( CODE )
+
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    int sok1;
+    scanf("%d", &sok1);
+    while (sok1--) {
+        int sok2;
+        scanf("%d", &sok2);
+        char sok3[11];
+        scanf("%s", sok3);
+        int sok4 = 0, sok5 = 0, sok6 = 0;
+        for (int sok7 = 0; sok7 < sok2; sok7++) {
+            if (sok3[sok7] == 'B') {
+                sok4++;
+            } else {
+                sok5++;
+            }
+            sok6++;
+            if (sok4 > 2 * sok5) {
+                break;
+            }
+        }
+        printf("%d\n", sok6);
+    }
+    return 0;
+}
