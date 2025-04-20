@@ -1,0 +1,39 @@
+AOOP TOPICS
+
+CO - 3
+
+1. Introduction to Multithreading, Multitasking, Multiprocessing, and Parallel Programming  
+
+2. Thread Creation & its methods  
+
+3. Thread Pool or Executor Framework  
+
+4. Thread Synchronization and Lock  
+
+5. Coordination among Threads using wait, notify, and notifyAll methods  
+
+6. Coordination among Threads using Blocking Queues and Semaphores  
+
+7. Deadlock Avoidance and Tracing of how a deadlock arises using Thread lifecycle  
+
+8. Synchronized Collections & Parallel Programming  
+
+CO - 4
+
+9. Limitations of File System and the need for JDBC API in application development  
+
+10. JDBC - Architecture (2 Tier & 3 Tier) and Drivers & Its Types  
+
+11. Steps to connect to the PostgreSQL database and perform CRUD Operations  
+
+12. An Overview of Client-Server Communication and Servlet and Servlet lifecycle  
+
+13. Servlet demo Application development with JSP Form Data  
+
+14. Servlet demo Application development with JDBC to persist data to the database  
+
+15. JSP & Advantages over servlets, features, syntax, Life Cycle of JSP  
+
+16. JSP tags  
+
+17. Interaction between JDBC, Servlet, and JSP Form Data for CRUD Operation
