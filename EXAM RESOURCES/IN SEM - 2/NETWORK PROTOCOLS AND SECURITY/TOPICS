@@ -1,0 +1,47 @@
+NPS TOPICS
+
+CO - 3 
+
+1. Address Resolution Protocol (ARP), Dynamic Host Configuration Protocol (DHCP)  
+
+2. Types of Routing: static  
+
+3. Dynamic routing  
+
+4. Networking Protocols: Routing Information Protocol (RIP), Open Shortest Path First (OSPF), Border Gateway Protocol (BGP)  
+
+5. Access Control list for IPV4, IPV6, Other Protocols  
+
+6. Transport Layer: Process to Process Delivery, UDP  
+
+7. TCP, Stream Control Transmission Protocol (SCTP)  
+
+8. Congestion Control: Open Loop, Closed Loop, Choke Packets  
+
+9. Quality of Service: Techniques to Improve QoS  
+
+10. Leaky bucket algorithm  
+
+11. Token bucket algorithm  
+
+12. Application Layer: Domain Name System (DNS), Simple Mail Transfer Protocol (SMTP), Simple Network Management Protocol (SNMP)  
+
+CO - 4
+
+13. Introduction to security, security goals  
+
+14. Security Attacks, Security Services and Mechanisms  
+
+15. A Security Model, Asymmetric & Symmetric key Ciphers  
+
+16. Substitution Techniques  
+
+17. Transposition Techniques  
+
+18. Data Encryption Standard (DES)  
+
+19. Data Encryption Standard (DES)  
+
+20. RSA algorithm  
+
+21. Secure Socket Layer – FLIPPED LEARNING
