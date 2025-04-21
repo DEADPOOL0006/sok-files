@@ -1,0 +1,41 @@
+DBMS TOPICS
+
+CO - 3
+
+1. Introduction to Transaction Management & Transaction processing issues  
+
+2. Transaction states  
+
+3. ACID properties  
+
+4. Problems during multiple transactions processing  
+
+5. Concurrency control Techniques (locking protocols) (Part-1)  
+
+6. Timestamp based protocols, deadlock Prevention Techniques  
+
+7. Recovery techniques (rollback, redo) to ensure data consistency  
+
+8. Indexing techniques  
+
+9. B-Tree and hash Indexing  
+
+10. Query optimization strategies for improving query performance  
+
+CO - 4 
+
+11. Introduction to NoSQL databases  
+
+12. NoSQL databases characteristics  
+
+13. Big Data concepts  
+
+14. Distributed storage (DFS)  
+
+15. Hadoop Frameworks (HDFS)  
+
+16. Security considerations in DBMS  
+
+17. Access control in DBMS-Roll Based Access Control  
+
+18. Database security Techniques (Encryption, Decryption)
