@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AADS WORKBOOK</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+  <!-- Add Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Amazon Ember', Arial, sans-serif;
+    }
+
+    html {
+      height: 100%;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #0f1923;
+      color: white;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body.menu-open {
+      overflow: hidden;
+    }
+
+    @font-face {
+      font-family: 'Amazon Ember';
+      src: url('https://m.media-amazon.com/images/G/01/primevideo/seo/primevideo-sans._TTH_.ttf') format('truetype');
+    }
+
+    /* Header with mobile toggle - Optimized for smooth scrolling */
+    header {
+      background: rgba(15, 25, 35, 0.95);
+      padding: 15px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                 box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(5px);
+      will-change: transform;
+      transform: translateZ(0);
+    }
+
+    header.scrolled {
+      transform: translateY(0);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      padding: 10px 5%;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo h1 {
+      color: #00a8e1;
+      font-size: 28px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(0, 168, 225, 0.3);
+      transition: all 0.3s;
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      margin-left: 15px;
+      transition: all 0.3s;
+      position: relative;
+      padding: 5px;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Theme toggle icon colors */
+    .bi-sun {
+      color: white;
+    }
+    
+    body[data-theme="light"] .bi-sun {
+      color: black;
+    }
+    
+    .bi-moon {
+      color: black;
+    }
+    
+    body[data-theme="light"] .bi-moon {
+      color: black;
+    }
+
+    /* Menu toggle icon colors */
+    .menu-toggle {
+      color: white;
+    }
+    
+    body[data-theme="light"] .menu-toggle {
+      color: black;
+    }
+
+    /* Mobile menu button */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      margin-right: 15px;
+    }
+
+ #desktop-nav {
+  display: flex;
+}
+
+#desktop-nav ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#desktop-nav ul li {
+  position: relative;
+  margin: 0 10px;
+}
+
+#desktop-nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 8px 15px;
+  display: block;
+  position: relative;
+  transition: color 0.3s ease;
+  z-index: 0;
+}
+
+/* Create 4 glowing border lines initially hidden */
+#desktop-nav ul li a::before,
+#desktop-nav ul li a::after,
+#desktop-nav ul li a span::before,
+#desktop-nav ul li a span::after {
+  content: '';
+  position: absolute;
+  background: #00a8e1;
+  transition: all 0.4s ease;
+  opacity: 0;
+  border-radius: 2px;
+}
+
+/* Top and Bottom lines */
+#desktop-nav ul li a::before,
+#desktop-nav ul li a::after {
+  left: 0;
+  width: 100%;
+  height: 2px;
+}
+
+#desktop-nav ul li a::before {
+  top: 0;
+  transform: translateX(-100%);
+}
+
+#desktop-nav ul li a::after {
+  bottom: 0;
+  transform: translateX(100%);
+}
+
+/* Left and Right lines (using a span inside link) */
+#desktop-nav ul li a > span {
+  position: relative;
+  display: inline-block;
+}
+
+#desktop-nav ul li a span::before,
+#desktop-nav ul li a span::after {
+  top: 0;
+  width: 2px;
+  height: 100%;
+}
+
+#desktop-nav ul li a span::before {
+  left: 0;
+  transform: translateY(-100%);
+}
+
+#desktop-nav ul li a span::after {
+  right: 0;
+  transform: translateY(100%);
+}
+
+/* On hover or active: show the glowing lines and change text color only */
+#desktop-nav ul li a:hover,
+#desktop-nav ul li a.active {
+  color: #00a8e1;
+  /* NO text-shadow here */
+  z-index: 1;
+}
+
+#desktop-nav ul li a:hover::before,
+#desktop-nav ul li a:hover::after,
+#desktop-nav ul li a:hover > span::before,
+#desktop-nav ul li a:hover > span::after,
+#desktop-nav ul li a.active::before,
+#desktop-nav ul li a.active::after,
+#desktop-nav ul li a.active > span::before,
+#desktop-nav ul li a.active > span::after {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+
+    /* Mobile menu styles */
+    .mobile-menu-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 999;
+      display: none;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    /* Dark mode mobile menu */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 80%;
+      max-width: 300px;
+      height: 100%;
+      background-color: rgba(15, 25, 35, 0.95);
+      z-index: 1000;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 20px;
+      overflow-y: auto;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      will-change: transform;
+    }
+
+    .mobile-menu nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      padding: 10px 0;
+      display: block;
+      transition: all 0.3s;
+    }
+
+    /* Light mode mobile menu - blue tint */
+    body[data-theme="light"] .mobile-menu {
+      background-color: white;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-right: 1px solid rgba(0, 168, 225, 0.2);
+    }
+
+    body[data-theme="light"] .mobile-menu nav ul li a {
+      color: #333;
+    }
+
+    /* Hide header when menu is open */
+    body.menu-open header {
+      display: none;
+    }
+
+    .mobile-menu.active {
+      left: 0;
+    }
+
+    .mobile-menu nav ul {
+      list-style: none;
+      margin-top: 30px;
+    }
+
+    .mobile-menu nav ul li {
+      margin-bottom: 15px;
+    }
+
+    /* Dark mode hover and active effect */
+    .mobile-menu nav ul li a:hover,
+    .mobile-menu nav ul li a.active {
+      color: yellow;
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px 15px;
+      display: block;
+    }
+
+    /* Light mode hover and active effect */
+    body[data-theme="light"] .mobile-menu nav ul li a:hover,
+    body[data-theme="light"] .mobile-menu nav ul li a.active {
+      color: yellow;
+      border: 2px solid rgba(0, 0, 0, 0.2);
+      background-color: rgba(0, 0, 0, 0.05);
+      border-radius: 10px;
+      padding: 10px 15px;
+      display: block;
+    }
+
+    .close-menu {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    body[data-theme="light"] .close-menu {
+      color: #333;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      height: 60vh;
+      display: flex;
+      align-items: center;
+      padding: 0 5%;
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 1;
+    }
+
+    body[data-theme="light"] .hero::before {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .hero-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    body[data-theme="light"] .hero-video {
+      opacity: 0.35;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 600px;
+    }
+
+    .hero-content h2 {
+      font-size: 48px;
+      font-weight: 700;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+      line-height: 1.2;
+      background: linear-gradient(to right, #ffffff, #00a8e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Main content wrapper */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Course Sections */
+    .docs-section {
+      padding: 60px 5%;
+      position: relative;
+    }
+
+    .docs-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(0, 168, 225, 0.5), transparent);
+    }
+
+    .docs-section h2 {
+      margin-bottom: 30px;
+      font-size: 28px;
+      font-weight: 700;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      position: relative;
+      padding-left: 20px;
+      display: inline-block;
+    }
+
+    .docs-section h2::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 5px;
+      background: linear-gradient(to bottom, #00a8e1, #007eb9);
+      border-radius: 3px;
+      box-shadow: 0 0 10px rgba(0, 168, 225, 0.5);
+    }
+
+    .docs-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 25px;
+    }
+
+    .doc-card {
+      background: linear-gradient(135deg, #1a2a3a, #14202d);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                 box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.05);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      will-change: transform;
+      transform: translateZ(0);
+    }
+
+    .doc-card:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+      z-index: 10;
+      border-color: rgba(0, 168, 225, 0.3);
+    }
+
+    .doc-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    /* Dark mode gradient */
+    body:not([data-theme="light"]) .doc-card::after {
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 40%);
+    }
+
+    /* Light mode gradient */
+    body[data-theme="light"] .doc-card::after {
+      background: linear-gradient(to top, rgba(254, 254, 254, 0.833) 0%, rgba(0,0,0,0) 40%);
+    }
+
+    .doc-card:hover::after {
+      opacity: 1;
+    }
+
+    .doc-thumbnail {
+      width: 100%;
+      height: 300px;
+      background-color: #2a3a4a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .doc-thumbnail::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(0, 168, 225, 0.1), transparent);
+      z-index: 1;
+    }
+
+    .doc-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+
+    .doc-card:hover .doc-thumbnail img {
+      transform: scale(1.1);
+    }
+
+    .doc-info {
+      padding: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .doc-title {
+      font-size: 18px;
+      margin-bottom: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: white;
+      transition: color 0.3s;
+    }
+
+    .doc-card:hover .doc-title {
+      color: #00a8e1;
+    }
+
+    .doc-meta {
+      color: rgba(255,255,255,0.7);
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .doc-meta span {
+      display: flex;
+      align-items: center;
+    }
+
+    .doc-meta span:first-child::before {
+      content: '\f133';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      margin-right: 8px;
+      color: #00a8e1;
+      font-size: 12px;
+    }
+
+    .doc-meta span:last-child::before {
+      content: '\f02d';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      margin-right: 8px;
+      color: #00a8e1;
+      font-size: 12px;
+    }
+
+    /* No results message */
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 40px;
+      color: rgba(255,255,255,0.7);
+      font-size: 18px;
+      display: none;
+      transition: opacity 0.2s ease;
+    }
+
+    /* Enhanced Download Section Styles */
+    .download-section {
+      padding: 40px 5%;
+      background: linear-gradient(135deg, #14202d, #0f1923);
+      border-radius: 15px;
+      margin: 30px 5%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .download-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 30%, rgba(0, 168, 225, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    
+    .content-grid {
+      display: flex;
+      gap: 40px;
+      position: relative;
+      z-index: 2;
+      align-items: center;
+    }
+    
+    /* Enhanced Poster Container */
+    .poster-container {
+      width: 250px;
+      flex-shrink: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      position: relative;
+      transition: transform 0.3s;
+      border: 2px solid #00a8e1;
+    }
+    
+    .poster-container:hover {
+      transform: translateY(-5px);
+    }
+    
+    .poster-image {
+      width: 100%;
+      height: 300px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .poster-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    
+    .poster-container:hover .poster-image img {
+      transform: scale(1.05);
+    }
+
+    /* Download Options */
+    .download-options {
+      flex: 1;
+    }
+    
+    .download-header {
+      margin-bottom: 20px;
+    }
+    
+    .title-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    
+    .page-title {
+      font-size: 24px;
+      color: #ffffff;
+      margin: 0;
+      font-weight: 700;
+    }
+    
+    .material-tagline {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 15px;
+      margin: 0 0 12px 0;
+    }
+    
+    .download-description {
+      background: rgba(255, 255, 255, 0.05);
+      border-left: 3px solid #00a8e1;
+      padding: 12px;
+      border-radius: 0 5px 5px 0;
+      margin-bottom: 25px;
+    }
+    
+    .download-description p {
+      color: rgba(255, 255, 255, 0.8);
+      margin: 0;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    
+    /* File size indicator */
+    .file-size {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #00a8e1;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    
+    .file-size i {
+      font-size: 16px;
+    }
+    
+    .download-actions {
+      margin-bottom: 20px;
+    }
+    
+    .download-title {
+      color: #ffffff;
+      font-size: 17px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .download-title i {
+      color: #00a8e1;
+      font-size: 16px;
+    }
+    
+    .download-buttons {
+      display: flex;
+      gap: 20px;
+    }
+    
+    /* Telegram-style Download Buttons */
+    .download-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      padding: 14px 28px;
+      color: white;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .download-btn i {
+      margin-right: 10px;
+      transition: all 0.3s ease;
+    }
+
+    /* Telegram-like wave effect on hover */
+    .download-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+      );
+      transition: 0.5s;
+    }
+
+    .download-btn:hover::before {
+      left: 100%;
+    }
+
+    /* Drive button specific styles */
+    .drive-btn {
+      background: linear-gradient(135deg, #4285F4, #3367D6);
+    }
+
+    .drive-btn:hover {
+      background: linear-gradient(135deg, #3367D6, #2547b3);
+      transform: translateY(-3px);
+      box-shadow: 0 7px 20px rgba(66, 133, 244, 0.4);
+    }
+
+    /* GitHub button specific styles */
+    .github-btn {
+      background: linear-gradient(135deg, #00a8e1, #0077b6);
+    }
+
+    .github-btn:hover {
+      background: linear-gradient(135deg, #0077b6, #005a8c);
+      transform: translateY(-3px);
+      box-shadow: 0 7px 20px rgba(0, 168, 225, 0.4);
+    }
+
+/* Green Torrent Button */
+.torrent-btn {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+.torrent-btn:hover {
+  background: linear-gradient(135deg, #27ae60, #219653);
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px rgba(46, 204, 113, 0.4);
+}
+
+    /* Footer */
+    footer {
+      background: linear-gradient(180deg, #0a121b, #070d14);
+      padding: 30px 5%;
+      position: relative;
+      overflow: hidden;
+      margin-top: auto;
+    }
+
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(0, 168, 225, 0.5), transparent);
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .footer-content p {
+      color: rgba(255,255,255,0.7);
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .footer-content a {
+      color: #00a8e1;
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 30px;
+      background: rgba(0, 168, 225, 0.1);
+      border: 1px solid rgba(0, 168, 225, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer-content a:hover {
+      color: #ffffff;
+      background: rgba(0, 168, 225, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 168, 225, 0.3);
+    }
+
+    .footer-content a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+      );
+      transition: 0.5s;
+    }
+
+    .footer-content a:hover::before {
+      left: 100%;
+    }
+
+    .footer-content a i {
+      transition: transform 0.3s;
+    }
+
+    .footer-content a:hover i {
+      transform: rotate(-30deg);
+    }
+
+    /* Telegram icon pulse effect */
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(0, 168, 225, 0.4);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(0, 168, 225, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(0, 168, 225, 0);
+      }
+    }
+
+    .footer-content a i {
+      animation: pulse 2s infinite;
+    }
+
+    .footer-content a:hover i {
+      animation: none;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0a121b;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #00a8e1;
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #007eb9;
+    }
+
+    /* Light Mode Styles */
+    body[data-theme="light"] {
+      background-color: white;
+      color: black;
+    }
+
+    body[data-theme="light"] header {
+      background: white;
+    }
+
+    body[data-theme="light"] header.scrolled {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    body[data-theme="light"] .doc-card {
+      background: white;
+      border-color: rgba(0,0,0,0.05);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    body[data-theme="light"] .doc-title {
+      color: black;
+    }
+
+    body[data-theme="light"] .doc-meta {
+      color: rgba(0, 0, 0, 0.7);
+    }
+
+    body[data-theme="light"] footer {
+      background: #f5f5f5;
+    }
+
+    body[data-theme="light"] .docs-section h2 {
+      color: black;
+    }
+
+    body[data-theme="light"] .footer-content p {
+      color: rgba(0, 0, 0, 0.7);
+    }
+
+    body[data-theme="light"] .footer-content a {
+      color: #00a8e1;
+      background: rgba(0, 168, 225, 0.1);
+      border: 1px solid rgba(0, 168, 225, 0.3);
+    }
+
+    body[data-theme="light"] .footer-content a:hover {
+      color: white;
+      background: rgba(0, 168, 225, 0.2);
+    }
+
+    body[data-theme="light"] .no-results {
+      color: rgba(0, 0, 0, 0.7);
+    }
+
+    body[data-theme="light"] .download-section {
+      background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+    }
+
+    body[data-theme="light"] .download-description {
+      background: rgba(0, 0, 0, 0.05);
+      border-left: 3px solid #00a8e1;
+    }
+
+    body[data-theme="light"] .download-description p {
+      color: rgba(0, 0, 0, 0.8);
+    }
+
+    body[data-theme="light"] .download-title {
+      color: #333;
+    }
+
+    body[data-theme="light"] .material-tagline {
+      color: rgba(0, 0, 0, 0.8);
+    }
+
+    /* Update scrollbar for light mode */
+    body[data-theme="light"] ::-webkit-scrollbar-track {
+      background: #f1f2f6;
+    }
+
+    body[data-theme="light"] ::-webkit-scrollbar-thumb {
+      background: #00a8e1;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+      .content-grid {
+        flex-direction: column;
+      }
+      
+      .poster-container {
+        width: 100%;
+        max-width: 280px;
+        margin: 0 auto 25px;
+      }
+      
+      .download-buttons {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      #desktop-nav {
+        display: none;
+      }
+
+      header {
+        flex-wrap: wrap;
+      }
+
+      .docs-container {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 15px;
+      }
+      
+      .doc-thumbnail {
+        height: 220px;
+      }
+
+      .footer-content {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+      
+      .footer-content a {
+        padding: 8px 16px;
+      }
+
+      /* Adjust theme toggle for mobile */
+      .theme-toggle {
+        margin-left: auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .docs-container {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      }
+      
+      .download-btn {
+        padding: 12px 20px;
+        font-size: 15px;
+      }
+
+    /* Add this new style to your existing styles */
+    .like-container {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+    
+    .like-btn {
+      background: none;
+      border: none;
+      color: #00a8e1;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      transition: all 0.3s;
+      padding: 5px;
+      border-radius: 20px;
+    }
+    
+    .like-btn:hover {
+      background: rgba(0, 168, 225, 0.1);
+      transform: scale(1.1);
+    }
+    
+    .like-btn i {
+      margin-right: 5px;
+    }
+    
+    .like-count {
+      color: rgba(255,255,255,0.7);
+      font-size: 14px;
+      margin-left: 5px;
+    }
+    
+    body[data-theme="light"] .like-count {
+      color: rgba(0, 0, 0, 0.7);
+    }
+    
+    /* Animation for like button */
+    @keyframes heartBeat {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.2); }
+      50% { transform: scale(1); }
+      75% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    
+    .liked {
+      animation: heartBeat 0.5s;
+      color: #ff4081;
+    }
+
+
+    }
+
+
+  </style>
+</head>
+<body>
+
+  <header id="main-header">
+    <div class="logo">
+      <button class="menu-toggle" id="menu-toggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      <h1>AADS</h1>
+    </div>
+    <nav id="desktop-nav">
+      <ul>
+     <li><a href="index.html" >HOME</a></li>
+       <li><a href="branches.html" >BRANCHES</a></li>
+        <li><a href="coursescse.html" >CSE</a></li>
+         <li><a href="coursesaids.html" >AI&DS</a></li>
+      </ul>
+    </nav>
+    <button class="theme-toggle" id="theme-toggle">
+      <i class="bi bi-sun"></i>
+      <i class="bi bi-moon" style="display: none;"></i>
+    </button>
+
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu-backdrop" id="mobile-menu-backdrop"></div>
+  <div class="mobile-menu" id="mobile-menu">
+    <button class="close-menu" id="close-menu">
+      <i class="fas fa-times"></i>
+    </button>
+    <nav>
+      <ul>
+        <li><a href="index.html" >HOME</a></li>
+       <li><a href="branches.html" >BRANCHES</a></li>
+        <li><a href="coursescse.html"  >CSE</a></li>
+         <li><a href="coursesaids.html" >AI&DS</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="main-content">
+    <!-- Enhanced Download Section -->
+    <section class="download-section">
+      <div class="content-grid">
+        <!-- Simplified Poster Container -->
+        <div class="poster-container">
+          <div class="poster-image">
+            <img src="https://raw.githubusercontent.com/studentsofklu/sok/main/exp/EXP1.jpg" alt="LAB 1 Image">
+          </div>
+        </div>
+        
+        <!-- Download options with enhanced UI -->
+        <div class="download-options">
+          <div class="download-header">
+            <div class="title-wrapper">
+              <h1 class="page-title">AADS WORKBOOK</h1>
+            </div>
+            <p class="material-tagline">EXP 1 ANSWERS</p>
+          </div>
+    
+          <!-- PDF Size Indicator -->
+          <div class="file-size">
+            <i class="fas fa-file-pdf"></i>
+            <span>File Size: 473 KB (PDF)</span>
+          </div>
+          
+          <div class="download-actions">
+            <h3 class="download-title"><i class="fas fa-cloud-download-alt"></i> Download Options</h3>
+            
+<div class="download-buttons">
+  <a href="https://drive.google.com/file/d/18IjLugmpVgVeyA2V3dwcLTA4Y6WnXo1H/view?usp=sharing" class="download-btn drive-btn">
+    <i class="fab fa-google-drive"></i> Google Drive
+  </a>
+
+  <a href="https://github.com/DEADPOOL0006/sokfiles/blob/main/ADVANCED%20ALGORITHMS%20%26%20DATA%20STRUCTURES/AADS%20LAB%20WORKBOOK%20ANSWERS/C%20CODE/AADS%20EXP%20-%201%20WORKBOOK%20ANSWER%20In%20C%20_SOK_.pdf" class="download-btn github-btn">
+    <i class="fab fa-github"></i> GitHub
+  </a>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+    </section>
+    
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2025 Students of KLU. All rights reserved.</p>
+      <p><a href="https://t.me/students_of_klu" target="_blank"><i class="fab fa-telegram-plane"></i> Join us on Telegram</a></p>
+    </div>
+  </footer>
+
+  <script>
+
+// Disable right-click
+document.addEventListener('contextmenu', function (e) {
+  e.preventDefault();
+});
+
+// Disable keyboard shortcuts
+document.addEventListener('keydown', function (e) {
+  const key = e.key.toLowerCase();
+
+  if (
+    e.keyCode === 123 || // F12
+    (e.ctrlKey && e.shiftKey && key === 'i') || // Ctrl+Shift+I
+    (e.ctrlKey && key === 'u') || // Ctrl+U
+    (e.ctrlKey && key === 's') || // Ctrl+S
+    (e.ctrlKey && key === 'c')    // Ctrl+C
+  ) {
+    e.preventDefault();
+  }
+});
+
+// Disable dragstart (image/text drag)
+document.addEventListener('dragstart', function (e) {
+  e.preventDefault();
+});
+
+// Disable text selection (double tap / long press drag)
+document.addEventListener('selectstart', function (e) {
+  e.preventDefault();
+});
+
+// Disable iframe view
+if (window.top !== window.self) {
+  window.top.location = window.self.location;
+}
+
+// DevTools detection via console.log trick
+(function () {
+  const element = new Image();
+  Object.defineProperty(element, 'id', {
+    get: function () {
+      showBlockMessage();
+    }
+  });
+  setInterval(function () {
+    console.log(element);
+  }, 1000);
+})();
+
+// DevTools detection via size difference
+(function () {
+  const threshold = 160;
+  setInterval(() => {
+    const widthExceeded = window.outerWidth - window.innerWidth > threshold;
+    const heightExceeded = window.outerHeight - window.innerHeight > threshold;
+
+    if (widthExceeded || heightExceeded) {
+      showBlockMessage();
+    }
+  }, 1000);
+})();
+
+// Disable long-press (on links and entire page)
+let touchTimer = null;
+document.addEventListener('touchstart', function (e) {
+  touchTimer = setTimeout(() => {
+    e.preventDefault(); // Block long-press on any element
+  }, 500); // 500ms = long-press threshold
+}, { passive: false });
+
+document.addEventListener('touchend', function () {
+  clearTimeout(touchTimer);
+});
+
+// Also disable context menu for long-press links
+document.querySelectorAll('a').forEach(link => {
+  link.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+  });
+});
+
+// Display block message with GIF
+function showBlockMessage() {
+  document.body.innerHTML = `
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: black; color: white;">
+      <h1 style="font-size: 3rem;">Enduku ?</h1>
+      <img src="https://media1.tenor.com/m/J8YuZ9x6Q_kAAAAC/athadu-telugu.gif" alt="Enduku GIF" style="max-width: 100%; height: auto; margin-top: 20px;" />
+    </div>
+  `;
+}
+    
+    // Mobile menu functionality
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
+    const closeMenu = document.getElementById('close-menu');
+    const body = document.body;
+
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.add('active');
+      mobileMenuBackdrop.style.display = 'block';
+      body.classList.add('menu-open');
+    });
+
+    closeMenu.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+      mobileMenuBackdrop.style.display = 'none';
+      body.classList.remove('menu-open');
+    });
+
+    mobileMenuBackdrop.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+      mobileMenuBackdrop.style.display = 'none';
+      body.classList.remove('menu-open');
+    });
+
+    // Optimized scroll handler with throttling
+    function throttle(func, limit) {
+      let lastFunc;
+      let lastRan;
+      return function() {
+        const context = this;
+        const args = arguments;
+        if (!lastRan) {
+          func.apply(context, args);
+          lastRan = Date.now();
+        } else {
+          clearTimeout(lastFunc);
+          lastFunc = setTimeout(function() {
+            if ((Date.now() - lastRan) >= limit) {
+              func.apply(context, args);
+              lastRan = Date.now();
+            }
+          }, limit - (Date.now() - lastRan));
+        }
+      }
+    }
+
+    const handleScroll = throttle(function() {
+      const header = document.getElementById('main-header');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    }, 16); // ~60fps
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Theme Toggle Functionality
+    const themeToggle = document.getElementById('theme-toggle');
+    const sunIcon = themeToggle.querySelector('.bi-sun');
+    const moonIcon = themeToggle.querySelector('.bi-moon');
+    
+    function toggleTheme() {
+      if (document.body.getAttribute('data-theme') === 'light') {
+        document.body.removeAttribute('data-theme');
+        sunIcon.style.display = 'block';
+        moonIcon.style.display = 'none';
+        document.querySelector('.menu-toggle').style.color = 'white';
+      } else {
+        document.body.setAttribute('data-theme', 'light');
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
+        document.querySelector('.menu-toggle').style.color = 'black';
+      }
+      localStorage.setItem('theme', document.body.getAttribute('data-theme'));
+    }
+
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      document.body.setAttribute('data-theme', 'light');
+      sunIcon.style.display = 'none';
+      moonIcon.style.display = 'block';
+      document.querySelector('.menu-toggle').style.color = 'black';
+    } else {
+      sunIcon.style.display = 'block';
+      moonIcon.style.display = 'none';
+      document.querySelector('.menu-toggle').style.color = 'white';
+    }
+
+    themeToggle.addEventListener('click', toggleTheme);
+
+    // Initialize - hide no results messages by default
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.no-results').forEach(el => {
+        el.style.display = 'none';
+      });
+
+      // Make sure content takes up at least the full viewport height minus the footer height
+      function adjustMainContentHeight() {
+        const footerHeight = document.querySelector('footer').offsetHeight;
+        const headerHeight = document.querySelector('header').offsetHeight;
+        const windowHeight = window.innerHeight;
+        const mainContent = document.querySelector('.main-content');
+        const minHeight = windowHeight - footerHeight - headerHeight;
+        mainContent.style.minHeight = `${minHeight}px`;
+      }
+      
+      // Run on load and on resize
+      adjustMainContentHeight();
+      window.addEventListener('resize', adjustMainContentHeight);
+    });
+  </script>
+</body>
+</html> 
